@@ -5,10 +5,12 @@ import { useGameStore } from '../store/gameStore';
 import { CelestialObject } from '../types';
 import CelestialCard from '../components/CelestialCard';
 import ProgressBar from '../components/ProgressBar';
+import ParticleEffect from '../components/ParticleEffect';
 
 const ExploreScreen: React.FC = () => {
   const [discoveredCard, setDiscoveredCard] = useState<CelestialObject | null>(null);
   const [showCard, setShowCard] = useState(false);
+  const [showParticles, setShowParticles] = useState(false);
   const fadeAnim = new Animated.Value(0);
   const scaleAnim = new Animated.Value(0.8);
 
@@ -31,6 +33,12 @@ const ExploreScreen: React.FC = () => {
   useEffect(() => {
     if (discoveredCard) {
       setShowCard(true);
+      
+      // Show particles for rare cards
+      if (discoveredCard.rarity !== 'Common') {
+        setShowParticles(true);
+      }
+
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
@@ -72,6 +80,7 @@ const ExploreScreen: React.FC = () => {
   };
 
   const handleCloseCard = () => {
+    setShowParticles(false);
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 0,
@@ -207,6 +216,12 @@ const ExploreScreen: React.FC = () => {
           </View>
         </Animated.View>
       )}
+
+      {/* Particle Effect */}
+      <ParticleEffect 
+        show={showParticles} 
+        rarity={discoveredCard?.rarity || 'Common'} 
+      />
     </View>
   );
 };

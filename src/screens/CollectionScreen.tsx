@@ -71,7 +71,7 @@ const CollectionScreen: React.FC = () => {
       </Text>
       {filter !== 'All' && (
         <Text style={styles.filterCount}>
-          {filter === 'All' ? discoveredObjects.length : getTypeStats()[filter]}
+          {getTypeStats()[filter as CelestialObjectType]}
         </Text>
       )}
     </TouchableOpacity>

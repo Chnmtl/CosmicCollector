@@ -123,7 +123,7 @@ const CelestialCard: React.FC<CelestialCardProps> = ({
         style={styles.cardGradient}
       >
         <LinearGradient
-          colors={rarityColors}
+          colors={rarityColors as [string, string]}
           style={styles.rarityBorder}
         >
           <View style={styles.cardInner}>

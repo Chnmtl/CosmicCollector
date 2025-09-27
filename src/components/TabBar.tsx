@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface TabBarProps {
-  activeTab: 'explore' | 'collection';
-  onTabChange: (tab: 'explore' | 'collection') => void;
+  activeTab: 'explore' | 'collection' | 'missions';
+  onTabChange: (tab: 'explore' | 'collection' | 'missions') => void;
 }
 
 const TabBar: React.FC<TabBarProps> = ({ activeTab, onTabChange }) => {
@@ -30,6 +30,16 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab, onTabChange }) => {
         <Text style={styles.tabIcon}>📱</Text>
         <Text style={[styles.tabText, activeTab === 'collection' && styles.activeTabText]}>
           Collection
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.tab, activeTab === 'missions' && styles.activeTab]}
+        onPress={() => onTabChange('missions')}
+      >
+        <Text style={styles.tabIcon}>🎯</Text>
+        <Text style={[styles.tabText, activeTab === 'missions' && styles.activeTabText]}>
+          Missions
         </Text>
       </TouchableOpacity>
     </LinearGradient>

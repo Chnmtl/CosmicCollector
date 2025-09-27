@@ -5,10 +5,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useGameStore } from './src/store/gameStore';
 import ExploreScreen from './src/screens/ExploreScreen';
 import CollectionScreen from './src/screens/CollectionScreen';
+import MissionsScreen from './src/screens/MissionsScreen';
 import TabBar from './src/components/TabBar';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'explore' | 'collection'>('explore');
+  const [activeTab, setActiveTab] = useState<'explore' | 'collection' | 'missions'>('explore');
   const loadProgress = useGameStore(state => state.loadProgress);
 
   useEffect(() => {
@@ -21,6 +22,8 @@ export default function App() {
         return <ExploreScreen />;
       case 'collection':
         return <CollectionScreen />;
+      case 'missions':
+        return <MissionsScreen />;
       default:
         return <ExploreScreen />;
     }
