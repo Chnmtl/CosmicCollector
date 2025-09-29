@@ -20,6 +20,7 @@ const ExploreScreen: React.FC = () => {
     exploreUniverse,
     canExplore,
     refillEnergy,
+    availableObjects,
   } = useGameStore();
 
   useEffect(() => {
@@ -112,14 +113,32 @@ const ExploreScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.title}>🌌 Cosmic Explorer</Text>
-        <Text style={styles.subtitle}>Discover the wonders of the universe</Text>
+      {/* Header bar */}
+      <LinearGradient colors={["#061226", "#071029"]} style={styles.headerBar}>
+        <View style={styles.headerIcon}>
+          <Text style={{ fontSize: 20 }}>🪐</Text>
+        </View>
+        <View style={styles.headerTitle}>
+          <Text style={styles.title}>Cosmic Explorer</Text>
+          <Text style={styles.subtitle}>Discover the wonders of the universe</Text>
+        </View>
+        <View style={{ width: 40 }} />
+      </LinearGradient>
+
+      {/* Badges row */}
+      <View style={styles.badgesRow}>
+        <View style={styles.badgeCard}>
+          <Text style={styles.badgeLabel}>Energy</Text>
+          <Text style={styles.badgeValue}>⚡ {userProgress.energy}/{userProgress.maxEnergy}</Text>
+        </View>
+        <View style={styles.badgeCard}>
+          <Text style={styles.badgeLabel}>Discovered</Text>
+          <Text style={styles.badgeValue}>⭐ {userProgress.totalDiscovered} / {availableObjects.length}</Text>
+        </View>
       </View>
 
-      {/* Progress Section */}
-      <View style={styles.progressSection}>
+      {/* Compact Progress / Level */}
+      <View style={styles.topCard}>
         <View style={styles.levelContainer}>
           <Text style={styles.levelText}>Level {userProgress.level}</Text>
           <Text style={styles.xpText}>{userProgress.xp}/{userProgress.xpToNextLevel} XP</Text>
@@ -128,94 +147,57 @@ const ExploreScreen: React.FC = () => {
           current={userProgress.xp} 
           max={userProgress.xpToNextLevel} 
           color="#00d4ff"
+          height={8}
         />
       </View>
 
-      {/* Energy Section */}
-      <View style={styles.energySection}>
-        <Text style={styles.energyTitle}>⚡ Energy</Text>
-        <View style={styles.energyContainer}>
-          {Array.from({ length: userProgress.maxEnergy }, (_, i) => (
-            <View
-              key={i}
-              style={[
-                styles.energyOrb,
-                i < userProgress.energy ? styles.energyOrbFilled : styles.energyOrbEmpty,
-              ]}
-            />
+      {/* Decorative space scene with Explore button */}
+      <View style={styles.spaceScene}>
+        <LinearGradient
+          colors={["#071029", "#0a0a1a"]}
+          style={styles.spaceGradient}
+        />
+        {/* small star dots */}
+        <View style={styles.starsContainer} pointerEvents="none">
+          {Array.from({ length: 18 }).map((_, i) => (
+            <View key={i} style={[styles.star, { top: (i * 37) % 200 + 10, left: (i * 73) % 320 + 10, opacity: (i % 3) / 3 + 0.4 }]} />
           ))}
         </View>
-        <Text style={styles.energyText}>
-          {userProgress.energy}/{userProgress.maxEnergy}
-        </Text>
-      </View>
 
-      {/* Stats Section */}
-      <View style={styles.statsSection}>
-        <View style={styles.statItem}>
-          <Text style={styles.statNumber}>{userProgress.totalDiscovered}</Text>
-          <Text style={styles.statLabel}>Discovered</Text>
-        </View>
-        <View style={styles.statItem}>
-          <Text style={styles.statNumber}>{Object.values(userProgress.discoveredByType).reduce((a, b) => a + b, 0)}</Text>
-          <Text style={styles.statLabel}>Total Objects</Text>
-        </View>
-      </View>
-
-      {/* Explore Section */}
-      <View style={styles.exploreSection}>
-        <TouchableOpacity
-          style={[
-            styles.exploreButton,
-            !canExplore() && styles.exploreButtonDisabled,
-          ]}
-          onPress={handleExplore}
-          disabled={!canExplore()}
-        >
-          <LinearGradient
-            colors={
-              canExplore()
-                ? ['#00d4ff', '#0099cc']
-                : ['#666', '#444']
-            }
-            style={styles.exploreButtonGradient}
-          >
-            <Text style={styles.exploreButtonText}>
-              {isExploring ? '🔍 Exploring...' : '🚀 Explore Universe'}
-            </Text>
-          </LinearGradient>
-        </TouchableOpacity>
-
-        {!canExplore() && userProgress.energy <= 0 && (
-          <Text style={styles.cooldownText}>
-            Energy will refill automatically over time
-          </Text>
-        )}
-      </View>
-
-      {/* Discovered Card Modal */}
-      {showCard && discoveredCard && (
-        <Animated.View
-          style={[
-            styles.cardModal,
-            {
-              opacity: fadeAnim,
-              transform: [{ scale: scaleAnim }],
-            },
-          ]}
-        >
-          <View style={styles.cardContainer}>
-            <CelestialCard 
-              object={discoveredCard} 
-              showBack={true}
-              onClose={handleCloseCard}
-            />
-            <View style={[styles.rarityBadge, { backgroundColor: getRarityColor(discoveredCard.rarity) }]}>
-              <Text style={styles.rarityText}>{discoveredCard.rarity}</Text>
-            </View>
+        <View style={styles.exploreInner}>
+          <View style={styles.exploreGlow}>
+            <TouchableOpacity
+              style={[
+                styles.exploreButton,
+                !canExplore() && styles.exploreButtonDisabled,
+              ]}
+              onPress={handleExplore}
+              disabled={!canExplore()}
+            >
+              <LinearGradient
+                colors={
+                  canExplore()
+                    ? ['#7CEAFF', '#0066FF']
+                    : ['#444', '#222']
+                }
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.exploreButtonGradient}
+              >
+                <Text style={styles.exploreButtonText}>
+                  {isExploring ? '🔍 Exploring...' : 'Explore'}
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
           </View>
-        </Animated.View>
-      )}
+
+          {!canExplore() && userProgress.energy <= 0 && (
+            <Text style={styles.cooldownText}>
+              Energy will refill automatically over time
+            </Text>
+          )}
+        </View>
+      </View>
 
       {/* Particle Effect */}
       <ParticleEffect 
@@ -229,7 +211,9 @@ const ExploreScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    // reduced top padding so header sits closer to top (removes unnecessary empty spot)
+    paddingTop: 24,
+    paddingHorizontal: 20,
   },
   header: {
     alignItems: 'center',
@@ -239,11 +223,24 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     color: '#fff',
-    marginBottom: 5,
+    marginBottom: 2,
   },
   subtitle: {
     fontSize: 16,
     color: '#aaa',
+  },
+  topHeader: {
+    marginBottom: 8,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  headerCenter: {
+    flex: 1,
+    alignItems: 'center',
   },
   progressSection: {
     marginBottom: 25,
@@ -326,11 +323,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   exploreButton: {
-    width: '80%',
-    height: 60,
-    borderRadius: 30,
+    width: 220,
+    height: 64,
+    borderRadius: 32,
     overflow: 'hidden',
-    marginBottom: 15,
+    // button bottom spacing handled by parent container now
+    marginBottom: 0,
+    shadowColor: '#00d4ff',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.18,
+    shadowRadius: 18,
+    elevation: 6,
   },
   exploreButtonDisabled: {
     opacity: 0.5,
@@ -343,7 +346,7 @@ const styles = StyleSheet.create({
   exploreButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#001018',
   },
   cooldownText: {
     fontSize: 14,
@@ -376,6 +379,139 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     color: '#fff',
+  },
+  /* New styles for updated layout */
+  headerBar: {
+    height: 84,
+    borderRadius: 12,
+    marginBottom: 12,
+    overflow: 'hidden',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+  },
+  headerIcon: {
+    width: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerTitle: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  badgesRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  badgeCard: {
+    flex: 1,
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    marginHorizontal: 6,
+    alignItems: 'center',
+  },
+  badgeLabel: {
+    color: '#aaa',
+    fontSize: 12,
+  },
+  badgeValue: {
+    color: '#fff',
+    fontWeight: '700',
+    marginTop: 6,
+  },
+  energyBadge: {
+    // kept for backward compatibility if used elsewhere
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 12,
+  },
+  energyBadgeText: {
+    color: '#fff',
+    fontWeight: '600',
+  },
+  topCard: {
+    marginBottom: 18,
+    padding: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.03)',
+  },
+  statSummary: {
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  statLabelSmall: {
+    color: '#aaa',
+    fontSize: 12,
+  },
+  statNumberLarge: {
+    color: '#00d4ff',
+    fontSize: 20,
+    fontWeight: '700',
+    marginTop: 6,
+  },
+  exploreHint: {
+    color: 'rgba(255,255,255,0.9)',
+    fontSize: 12,
+    marginTop: 6,
+    textAlign: 'center',
+  },
+  discoveredBadge: {
+    // kept for backward compatibility if used elsewhere
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 12,
+  },
+  discoveredBadgeText: {
+    color: '#fff',
+    fontWeight: '700',
+  },
+  spaceScene: {
+    flex: 1,
+    marginTop: 8,
+    borderRadius: 16,
+    overflow: 'hidden',
+    // keep relative positioning so absolutely positioned children are anchored to this box
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#071029',
+  },
+  spaceGradient: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.9,
+  },
+  starsContainer: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  star: {
+    position: 'absolute',
+    width: 3,
+    height: 3,
+    borderRadius: 2,
+    backgroundColor: 'rgba(255,255,255,0.9)'
+  },
+  exploreInner: {
+    // anchor the button container to the bottom of the spaceScene
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 28,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 20,
+  },
+  exploreGlow: {
+    shadowColor: '#7CEAFF',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.18,
+    shadowRadius: 24,
+    elevation: 8,
+    borderRadius: 34,
   },
 });
 

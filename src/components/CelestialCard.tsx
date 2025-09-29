@@ -63,7 +63,7 @@ const CelestialCard: React.FC<CelestialCardProps> = ({
   );
 
   const renderBack = () => (
-    <ScrollView style={styles.cardContent} showsVerticalScrollIndicator={false}>
+    <ScrollView contentContainerStyle={styles.cardContent} showsVerticalScrollIndicator={false}>
       <Text style={styles.objectIcon}>{object.image}</Text>
       <Text style={styles.objectNameBack}>{object.name}</Text>
       

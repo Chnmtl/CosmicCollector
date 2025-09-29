@@ -91,7 +91,8 @@ const CollectionScreen: React.FC = () => {
 
       {/* Stats Section */}
       <View style={styles.statsSection}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {/* Why ScrollView here? */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}> 
           <View style={styles.statCard}>
             <Text style={styles.statNumber}>{rarityStats.Common}</Text>
             <Text style={styles.statLabel}>Common</Text>
@@ -116,6 +117,7 @@ const CollectionScreen: React.FC = () => {
         horizontal 
         showsHorizontalScrollIndicator={false}
         style={styles.filtersContainer}
+        contentContainerStyle={styles.filtersContent}
       >
         {filters.map(renderFilter)}
       </ScrollView>
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 12,
   },
   title: {
     fontSize: 28,
@@ -186,13 +188,16 @@ const styles = StyleSheet.create({
     color: '#aaa',
   },
   statsSection: {
-    marginBottom: 20,
+    // marginBottom: 6,
   },
   statCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    padding: 15,
+    // paddingVertical: 10,
+    // paddingHorizontal: 12,
+    padding: 10,
     borderRadius: 10,
     alignItems: 'center',
+    // justifyContent: 'center',
     marginRight: 10,
     minWidth: 80,
   },
@@ -207,48 +212,60 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   filtersContainer: {
-    marginBottom: 20,
+    marginTop: 10,
+    maxHeight: 80,
+    // marginBottom: 6,
+  },
+  filtersContent: {
+    // alignItems: 'center',
+    // paddingVertical: 0, 
   },
   filterButton: {
+    // match statCard sizing so there's no extra empty space
     flexDirection: 'column',
     alignItems: 'center',
-    padding: 10,
-    marginRight: 15,
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    marginRight: 10,
     borderRadius: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    minWidth: 70,
+    minWidth: 76,
   },
   activeFilterButton: {
     backgroundColor: 'rgba(0, 212, 255, 0.2)',
   },
   filterIcon: {
-    fontSize: 20,
-    marginBottom: 5,
+    fontSize: 22,
+    marginBottom: 6,
   },
   filterText: {
-    fontSize: 12,
-    color: '#aaa',
+    fontSize: 13,
+    color: '#ddd',
     textAlign: 'center',
+    marginBottom: 4,
   },
   activeFilterText: {
     color: '#00d4ff',
     fontWeight: 'bold',
   },
   filterCount: {
-    fontSize: 10,
-    color: '#666',
+    fontSize: 11,
+    color: '#ccc',
     marginTop: 2,
   },
   collectionContainer: {
-    flex: 1,
+    flex: 4,
   },
   gridContainer: {
-    padding: 5,
+    padding: 6,
   },
   cardWrapper: {
     flex: 1,
-    margin: 5,
+    margin: 6,
     alignItems: 'center',
+    // make cards taller so object art and titles are clearer
+    minHeight: 240,
   },
   emptyState: {
     flex: 1,
