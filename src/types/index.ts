@@ -1,4 +1,4 @@
-export type CelestialObjectType = 'Star' | 'Planet' | 'Galaxy' | 'Exoplanet' | 'Nebula' | 'BlackHole';
+export type CelestialObjectType = 'Star' | 'Planet' | 'Galaxy' | 'Exoplanet' | 'Nebula' | 'BlackHole' | 'Moon';
 
 export type Rarity = 'Common' | 'Rare' | 'Epic' | 'Legendary';
 
@@ -6,11 +6,29 @@ export interface CelestialObject {
   id: string;
   name: string;
   type: CelestialObjectType;
+  // legacy emoji/icon or small local asset key. Prefer `image_url` for remote images.
   image: string;
+  // Remote image URL (photograph or illustration). Matches common API fields.
+  image_url?: string;
+  // short typed subtype (e.g. "Red Supergiant", "Gas Giant", "Super-Earth")
+  subtype?: string;
+  // human readable description (long form). Replaces/augments `lore`.
+  description?: string;
   rarity: Rarity;
   xp: number;
   loot: string[];
+  // legacy short flavor text (kept for backward compatibility)
   lore: string;
+  // API-friendly top-level numeric fields for easy filtering / sorting
+  distance_ly?: number | null; // distance in light years when applicable
+  mass_solar?: number | null; // mass in solar masses when applicable
+  radius_solar?: number | null; // radius in solar radii when applicable
+  temperature_k?: number | null; // temperature in Kelvin
+  discovered_by?: string | null;
+  constellation?: string | null;
+  facts?: string[];
+  source?: string;
+  // keep a flexible stats object for UI/legacy values (strings with units)
   stats: {
     size?: string;
     distance?: string;
@@ -18,6 +36,8 @@ export interface CelestialObject {
     mass?: string;
     age?: string;
     specialty?: string;
+    orbit?: string;
+    hostStar?: string;
   };
   discovered: boolean;
   discoveredAt?: Date;

@@ -34,6 +34,7 @@ const initialUserProgress: UserProgress = {
   discoveredByType: {
     Star: 0,
     Planet: 0,
+    Moon: 0,
     Galaxy: 0,
     Exoplanet: 0,
     Nebula: 0,
