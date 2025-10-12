@@ -43,6 +43,20 @@ export const defaultMissions: Mission[] = [
     targetType: 'Planet',
   },
   {
+    id: 'lunar-enthusiast',
+    title: 'Lunar Enthusiast',
+    description: 'Discover 2 different moons',
+    target: 2,
+    current: 0,
+    reward: {
+      xp: 80,
+      loot: ['Lunar Module', 'Ice Sample'],
+    },
+    completed: false,
+    type: 'discover',
+    targetType: 'Moon',
+  },
+  {
     id: 'rare-hunter',
     title: 'Rare Hunter',
     description: 'Discover 3 rare or higher celestial objects',

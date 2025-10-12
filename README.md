@@ -37,6 +37,7 @@ Cosmic Collector is a 2D space exploration and collectible card app built in Rea
 **22 unique objects across 6 categories:**
 - **Stars**: Sol, Sirius, Betelgeuse, Vega, Rigel, Alpha Centauri
 - **Planets**: Earth, Mars, Jupiter, Venus, Saturn
+- **Moons**: Earth's Moon (placeholder), Europa, Titan (examples)
 - **Galaxies**: Milky Way, Andromeda, Whirlpool Galaxy
 - **Exoplanets**: Kepler-22b, Proxima Centauri b, TRAPPIST-1e
 - **Nebulae**: Orion Nebula, Crab Nebula, Horsehead Nebula
