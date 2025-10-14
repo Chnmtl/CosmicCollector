@@ -68,7 +68,10 @@ export const formatStats = (object: CelestialObject): FormattedStat[] => {
     .filter(([_, value]) => value !== undefined && value !== null && value !== '')
     .map(([key, value]) => ({
       key,
-      value: String(value),
+      // Special formatting for boolean and number types
+      value: typeof value === 'boolean' 
+        ? (value ? 'Yes' : 'No') 
+        : String(value),
       displayKey: formatStatKey(key),
     }));
 };

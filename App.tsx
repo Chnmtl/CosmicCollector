@@ -13,10 +13,18 @@ export default function App() {
     "explore" | "collection" | "missions"
   >("explore");
   const loadProgress = useGameStore((state) => state.loadProgress);
+  const fetchAndCachePlanets = useGameStore(
+    (state) => state.fetchAndCachePlanets
+  );
 
   useEffect(() => {
-    loadProgress();
-  }, [loadProgress]);
+    const initializeApp = async () => {
+      await loadProgress();
+      await fetchAndCachePlanets();
+    };
+
+    initializeApp();
+  }, [loadProgress, fetchAndCachePlanets]);
 
   const renderScreen = () => {
     switch (activeTab) {

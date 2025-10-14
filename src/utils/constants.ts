@@ -60,7 +60,9 @@ export const CARD_TEXT_COLOR = '#ffffff';
 // Maps celestial type to the stat keys that should appear on front
 export const FRONT_CARD_STATS: Record<CelestialObjectType, string[]> = {
   Star: ['distance', 'temperature', 'mass'],
-  Planet: ['distance', 'size', 'temperature'],
+  // Planets show their API-fetched stats on front (type, diameter, moons)
+  // If those don't exist, fallback to legacy stats (distance, size, temperature)
+  Planet: ['type', 'diameter', 'moons', 'surfaceTemperature', 'distance', 'size', 'temperature'],
   Moon: ['distance', 'size', 'temperature'],
   Galaxy: ['distance', 'size', 'mass'],
   Exoplanet: ['distance', 'size', 'temperature'],

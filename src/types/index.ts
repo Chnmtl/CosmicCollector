@@ -38,6 +38,21 @@ export interface CelestialObject {
     specialty?: string;
     orbit?: string;
     hostStar?: string;
+    // Planet-specific stats (from API data)
+    type?: string; // Rocky, Gas Giant, Ice Giant
+    diameter?: string; // Planet diameter in km
+    moons?: number; // Number of moons
+    moonNames?: string[]; // Names of all moons
+    gravity?: string; // Surface gravity in m/s²
+    distanceFromSun?: string; // Distance from sun in million km
+    dayLength?: string; // Length of one day (hours or days)
+    yearLength?: string; // Orbital period in days
+    surfaceTemperature?: string; // Average surface temperature
+    atmosphere?: string; // Atmospheric composition
+    density?: string; // Density in g/cm³
+    rings?: boolean; // Whether the planet has rings
+    discoveredBy?: string; // Who discovered it
+    discoveryDate?: string; // When it was discovered
   };
   discovered: boolean;
   discoveredAt?: Date;
