@@ -1,7 +1,16 @@
 import { SolarSystemPlanetResponse, ProcessedPlanetData } from './types';
 
 const API_BASE_URL = 'https://api.le-systeme-solaire.net/rest/bodies';
-const API_KEY = '09955a09-b6ba-40a1-8b77-b3fe56ac1f74';
+const API_KEY = process.env.EXPO_PUBLIC_SOLAR_SYSTEM_API_KEY;
+
+// Validate API key is available
+if (!API_KEY) {
+  throw new Error(
+    'EXPO_PUBLIC_SOLAR_SYSTEM_API_KEY is not defined. ' +
+    'Please create a .env file with your API key. ' +
+    'See .env.example for reference.'
+  );
+}
 
 const PLANET_NAMES = [
   'Mercury',

@@ -80,7 +80,16 @@ Each object includes:
    npm install
    ```
 
-3. **Start the development server**
+3. **Configure API Keys**
+   ```bash
+   # Copy the environment template
+   cp .env.example .env
+   
+   # Edit .env and add your Solar System API key
+   # Get your API key from: https://api.le-systeme-solaire.net/
+   ```
+
+4. **Start the development server**
    ```bash
    npm run web      # Web development
    npm run android  # Android development
