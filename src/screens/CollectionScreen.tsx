@@ -7,9 +7,9 @@ import {
   Modal,
   TouchableWithoutFeedback,
 } from "react-native";
-import { useGameStore } from "../store/gameStore";
-import { CelestialObject, CelestialObjectType, Rarity } from "../types";
-import { CompactCard, DetailedCard } from "../components/cards";
+import { useCollectionStore } from "../store/collectionStore";
+import { CosmicObject, CosmicObjectType, Rarity } from "../models";
+import { CompactCard, FlippableCard } from "../components/cards";
 import {
   CollectionHeader,
   RarityFilter,
@@ -19,21 +19,22 @@ import {
 import { filterObjects, GRID_CONFIG } from "../utils";
 
 const CollectionScreen: React.FC = () => {
-  const [selectedType, setSelectedType] = useState<CelestialObjectType | "All">(
+  const [selectedType, setSelectedType] = useState<CosmicObjectType | "All">(
     "All"
   );
   const [selectedRarity, setSelectedRarity] = useState<Rarity | "All">("All");
-  const [selectedCard, setSelectedCard] = useState<CelestialObject | null>(
-    null
-  );
+  const [selectedCard, setSelectedCard] = useState<CosmicObject | null>(null);
 
-  const { discoveredObjects } = useGameStore();
+  const { getDiscoveredObjects } = useCollectionStore();
   const { width: windowWidth } = useWindowDimensions();
 
-  // Filter objects using utility function
+  // Get discovered objects as CosmicObject array
+  const discoveredCosmicObjects = getDiscoveredObjects();
+
+  // Filter objects using utility function (works with CosmicObject)
   const filteredObjects = useMemo(
-    () => filterObjects(discoveredObjects, selectedType, selectedRarity),
-    [discoveredObjects, selectedType, selectedRarity]
+    () => filterObjects(discoveredCosmicObjects, selectedType, selectedRarity),
+    [discoveredCosmicObjects, selectedType, selectedRarity]
   );
 
   // Calculate responsive columns for grid
@@ -53,7 +54,7 @@ const CollectionScreen: React.FC = () => {
   }, [windowWidth]);
 
   // Render card item for FlatList
-  const renderCard = ({ item }: { item: CelestialObject }) => (
+  const renderCard = ({ item }: { item: any }) => (
     <View style={styles.cardWrapper}>
       <CompactCard object={item} onPress={() => setSelectedCard(item)} />
     </View>
@@ -62,26 +63,26 @@ const CollectionScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <CollectionHeader totalObjects={discoveredObjects.length} />
+      <CollectionHeader totalObjects={discoveredCosmicObjects.length} />
 
       {/* Rarity Filter */}
       <RarityFilter
-        objects={discoveredObjects}
+        objects={discoveredCosmicObjects}
         selectedRarity={selectedRarity}
         onSelectRarity={setSelectedRarity}
       />
 
       {/* Type Filter */}
       <TypeFilter
-        objects={discoveredObjects}
-        allObjects={discoveredObjects}
+        objects={discoveredCosmicObjects}
+        allObjects={discoveredCosmicObjects}
         selectedType={selectedType}
         onSelectType={setSelectedType}
       />
 
       {/* Collection Grid */}
       <View style={styles.collectionContainer}>
-        {discoveredObjects.length === 0 ? (
+        {discoveredCosmicObjects.length === 0 ? (
           <EmptyState
             icon="🚀"
             title="Start Your Journey"
@@ -122,7 +123,7 @@ const CollectionScreen: React.FC = () => {
             <TouchableWithoutFeedback onPress={() => {}}>
               <View>
                 {selectedCard && (
-                  <DetailedCard
+                  <FlippableCard
                     object={selectedCard}
                     onClose={() => setSelectedCard(null)}
                   />

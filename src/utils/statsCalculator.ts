@@ -1,4 +1,5 @@
-import { CelestialObject, CelestialObjectType, Rarity } from '../types';
+import { CosmicObject, CosmicObjectType, Rarity } from '../models';
+import { calculateXpReward } from './gameBalance';
 
 /**
  * Calculate rarity statistics from discovered objects
@@ -11,7 +12,7 @@ export interface RarityStats {
 }
 
 export const calculateRarityStats = (
-  objects: CelestialObject[]
+  objects: CosmicObject[]
 ): RarityStats => {
   const stats: RarityStats = {
     Common: 0,
@@ -32,10 +33,10 @@ export const calculateRarityStats = (
 /**
  * Calculate type statistics from discovered objects
  */
-export type TypeStats = Record<CelestialObjectType, number>;
+export type TypeStats = Record<CosmicObjectType, number>;
 
 export const calculateTypeStats = (
-  objects: CelestialObject[]
+  objects: CosmicObject[]
 ): TypeStats => {
   const stats: TypeStats = {
     Star: 0,
@@ -49,7 +50,7 @@ export const calculateTypeStats = (
 
   objects.forEach((obj) => {
     if (obj.type in stats) {
-      stats[obj.type]++;
+      stats[obj.type as CosmicObjectType]++;
     }
   });
 
@@ -71,17 +72,17 @@ export const calculateCompletionPercentage = (
  * Calculate type completion stats
  */
 export interface TypeCompletion {
-  type: CelestialObjectType;
+  type: CosmicObjectType;
   discovered: number;
   total: number;
   percentage: number;
 }
 
 export const calculateTypeCompletion = (
-  discoveredObjects: CelestialObject[],
-  allObjects: CelestialObject[]
+  discoveredObjects: CosmicObject[],
+  allObjects: CosmicObject[]
 ): TypeCompletion[] => {
-  const types: CelestialObjectType[] = [
+  const types: CosmicObjectType[] = [
     'Star',
     'Planet',
     'Moon',
@@ -116,8 +117,8 @@ export interface RarityCompletion {
 }
 
 export const calculateRarityCompletion = (
-  discoveredObjects: CelestialObject[],
-  allObjects: CelestialObject[]
+  discoveredObjects: CosmicObject[],
+  allObjects: CosmicObject[]
 ): RarityCompletion[] => {
   const rarities: Rarity[] = ['Common', 'Rare', 'Epic', 'Legendary'];
 
@@ -138,17 +139,17 @@ export const calculateRarityCompletion = (
 /**
  * Calculate total XP earned from discovered objects
  */
-export const calculateTotalXP = (objects: CelestialObject[]): number => {
-  return objects.reduce((total, obj) => total + obj.xp, 0);
+export const calculateTotalXP = (objects: CosmicObject[]): number => {
+  return objects.reduce((total, obj) => total + calculateXpReward(obj.rarity), 0);
 };
 
 /**
  * Get most recent discoveries (sorted by discovery date)
  */
 export const getRecentDiscoveries = (
-  objects: CelestialObject[],
+  objects: CosmicObject[],
   limit: number = 5
-): CelestialObject[] => {
+): CosmicObject[] => {
   return [...objects]
     .filter((obj) => obj.discoveredAt)
     .sort((a, b) => {
@@ -170,9 +171,9 @@ const RARITY_VALUE: Record<Rarity, number> = {
 };
 
 export const getRarestDiscoveries = (
-  objects: CelestialObject[],
+  objects: CosmicObject[],
   limit: number = 5
-): CelestialObject[] => {
+): CosmicObject[] => {
   return [...objects]
     .sort((a, b) => RARITY_VALUE[b.rarity] - RARITY_VALUE[a.rarity])
     .slice(0, limit);

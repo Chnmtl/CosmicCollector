@@ -9,29 +9,41 @@ import {
   Modal,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useGameStore } from "../store/gameStore";
-import { CelestialObject } from "../types";
-import { DetailedCard } from "../components/cards";
+import { usePlayerStore } from "../store/playerStore";
+import { useCollectionStore } from "../store/collectionStore";
+import { useInventoryStore } from "../store/inventoryStore";
+import { CosmicObject } from "../models";
+import {
+  getRarityAccentColor,
+  getTypeBackground,
+  getRarityColors,
+  calculateXpReward,
+  calculateEnergyCost,
+} from "../utils";
+import { FlippableCard } from "../components/cards";
 import ProgressBar from "../components/ProgressBar";
 import ParticleEffect from "../components/ParticleEffect";
 
 const ExploreScreen: React.FC = () => {
-  const [discoveredCard, setDiscoveredCard] = useState<CelestialObject | null>(
+  const [discoveredCard, setDiscoveredCard] = useState<CosmicObject | null>(
     null
   );
   const [showCard, setShowCard] = useState(false);
   const [showParticles, setShowParticles] = useState(false);
+  const [isExploring, setIsExploring] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
 
+  // New stores
+  const { progress, useEnergy, addXp, canAffordEnergy, refillEnergy } =
+    usePlayerStore();
   const {
-    userProgress,
-    isExploring,
-    exploreUniverse,
-    canExplore,
-    refillEnergy,
-    availableObjects,
-  } = useGameStore();
+    catalog,
+    getRandomUndiscovered,
+    discoverObject,
+    getUndiscoveredObjects,
+  } = useCollectionStore();
+  const { addMultipleItems } = useInventoryStore();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -67,27 +79,49 @@ const ExploreScreen: React.FC = () => {
   }, [discoveredCard]);
 
   const handleExplore = async () => {
-    if (!canExplore()) {
-      if (userProgress.energy <= 0) {
-        Alert.alert(
-          "No Energy",
-          "You need energy to explore! Energy refills automatically over time.",
-          [{ text: "OK" }]
-        );
-      }
+    // Check if player has energy
+    if (!canAffordEnergy(1)) {
+      Alert.alert(
+        "No Energy",
+        "You need energy to explore! Energy refills automatically over time.",
+        [{ text: "OK" }]
+      );
       return;
     }
 
-    const card = await exploreUniverse();
-    if (card) {
-      setDiscoveredCard(card);
-    } else {
+    setIsExploring(true);
+
+    // Simulate exploration delay
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    // Get random undiscovered object
+    const cosmicObject = getRandomUndiscovered();
+
+    if (!cosmicObject) {
       Alert.alert(
         "Exploration Complete",
         "You have discovered all available celestial objects!",
         [{ text: "Amazing!" }]
       );
+      setIsExploring(false);
+      return;
     }
+
+    // Use energy (always costs 1 energy)
+    useEnergy(calculateEnergyCost());
+
+    // Mark as discovered
+    discoverObject(cosmicObject.id);
+
+    // Add XP based on rarity
+    addXp(calculateXpReward(cosmicObject.rarity));
+
+    // Add loot to inventory
+    addMultipleItems(cosmicObject.loot);
+
+    // Show discovered object
+    setDiscoveredCard(cosmicObject);
+    setIsExploring(false);
   };
 
   const handleCloseCard = () => {
@@ -147,13 +181,13 @@ const ExploreScreen: React.FC = () => {
         <View style={styles.badgeCard}>
           <Text style={styles.badgeLabel}>Energy</Text>
           <Text style={styles.badgeValue}>
-            ⚡ {userProgress.energy}/{userProgress.maxEnergy}
+            ⚡ {progress.energy}/{progress.maxEnergy}
           </Text>
         </View>
         <View style={styles.badgeCard}>
           <Text style={styles.badgeLabel}>Discovered</Text>
           <Text style={styles.badgeValue}>
-            ⭐ {userProgress.totalDiscovered} / {availableObjects.length}
+            ⭐ {catalog.size - getUndiscoveredObjects().length} / {catalog.size}
           </Text>
         </View>
       </View>
@@ -161,14 +195,14 @@ const ExploreScreen: React.FC = () => {
       {/* Compact Progress / Level */}
       <View style={styles.topCard}>
         <View style={styles.levelContainer}>
-          <Text style={styles.levelText}>Level {userProgress.level}</Text>
+          <Text style={styles.levelText}>Level {progress.level}</Text>
           <Text style={styles.xpText}>
-            {userProgress.xp}/{userProgress.xpToNextLevel} XP
+            {progress.xp}/{progress.xpToNextLevel} XP
           </Text>
         </View>
         <ProgressBar
-          current={userProgress.xp}
-          max={userProgress.xpToNextLevel}
+          current={progress.xp}
+          max={progress.xpToNextLevel}
           color="#00d4ff"
           height={8}
         />
@@ -202,14 +236,17 @@ const ExploreScreen: React.FC = () => {
             <TouchableOpacity
               style={[
                 styles.exploreButton,
-                !canExplore() && styles.exploreButtonDisabled,
+                (!canAffordEnergy(1) || isExploring) &&
+                  styles.exploreButtonDisabled,
               ]}
               onPress={handleExplore}
-              disabled={!canExplore()}
+              disabled={!canAffordEnergy(1) || isExploring}
             >
               <LinearGradient
                 colors={
-                  canExplore() ? ["#7CEAFF", "#0066FF"] : ["#444", "#222"]
+                  canAffordEnergy(1) && !isExploring
+                    ? ["#7CEAFF", "#0066FF"]
+                    : ["#444", "#222"]
                 }
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -222,7 +259,7 @@ const ExploreScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
 
-          {!canExplore() && userProgress.energy <= 0 && (
+          {!canAffordEnergy(1) && progress.energy <= 0 && (
             <Text style={styles.cooldownText}>
               Energy will refill automatically over time
             </Text>
@@ -254,7 +291,10 @@ const ExploreScreen: React.FC = () => {
                 },
               ]}
             >
-              <DetailedCard object={discoveredCard} onClose={handleCloseCard} />
+              <FlippableCard
+                object={discoveredCard}
+                onClose={handleCloseCard}
+              />
 
               {/* Close Button */}
               <TouchableOpacity

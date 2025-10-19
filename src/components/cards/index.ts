@@ -5,4 +5,4 @@
 export { default as CompactCard } from './CompactCard';
 export { default as CardFront } from './CardFront';
 export { default as CardBack } from './CardBack';
-export { default as DetailedCard } from './DetailedCard';
+export { default as FlippableCard } from './FlippableCard';

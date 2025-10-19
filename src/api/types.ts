@@ -1,35 +1,23 @@
+/**
+ * Solar System API Response Type
+ * Contains only the fields we actually use from the API
+ */
 export interface SolarSystemPlanetResponse {
   id: string;
-  name: string;
   englishName: string;
-  isPlanet: boolean;
   moons: Array<{ moon: string; rel: string }> | null;
-  semimajorAxis: number; // km
-  perihelion: number; // km
-  aphelion: number; // km
-  eccentricity: number;
-  inclination: number; // degrees
+  semimajorAxis: number; // km - distance from sun
   mass: { massValue: number; massExponent: number };
-  vol: { volValue: number; volExponent: number };
   density: number; // g/cm³
   gravity: number; // m/s²
-  escape: number; // m/s
   meanRadius: number; // km
-  equaRadius: number; // km
-  polarRadius: number; // km
-  flattening: number;
-  dimension: string;
-  sideralOrbit: number; // days
-  sideralRotation: number; // hours
-  aroundPlanet: { planet: string } | null;
+  sideralOrbit: number; // days - orbital period
+  sideralRotation: number; // hours - rotation period
+  avgTemp: number; // Kelvin
   discoveredBy: string;
   discoveryDate: string;
-  alternativeName: string;
-  axialTilt: number; // degrees
-  avgTemp: number; // Kelvin
-  mainAnomaly: number; // degrees
-  argPeriapsis: number; // degrees
-  longAscNode: number; // degrees
+  // Optional for moons
+  eccentricity?: number; // for determining moon type (regular vs irregular)
 }
 
 export interface NASAImageResult {
@@ -55,34 +43,27 @@ export interface WikipediaExtract {
     pages?: {
       [key: string]: {
         extract?: string;
+        missing?: any;
       };
     };
+    search?: Array<{
+      title: string;
+      snippet?: string;
+    }>;
   };
 }
 
-export interface ProcessedPlanetData {
-  id: string;
-  name: string;
-  type: string;
-  rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary';
-  xpReward: number;
-  energyCost: number;
-  discoveryChance: number;
-  emoji: string;
-  lore: string;
-  loot: string[];
-  image?: string;
-  diameter?: number;
-  moons?: number;
-  moonNames?: string[];
-  gravity?: number;
-  distanceFromSun?: number;
-  dayLength?: number;
-  yearLength?: number;
-  surfaceTemperature?: number;
-  atmosphere?: string;
-  density?: number;
-  rings?: boolean;
-  discoveredBy?: string;
-  discoveryDate?: string;
+export interface WikipediaImageResponse {
+  title: string;
+  originalimage?: {
+    source: string;
+    width: number;
+    height: number;
+  };
+  thumbnail?: {
+    source: string;
+    width: number;
+    height: number;
+  };
+  extract?: string;
 }

@@ -1,7 +1,7 @@
-import { CelestialObjectType, Rarity } from '../types';
+import { CosmicObjectType, Rarity } from '../models';
 
 /**
- * Visual constants for celestial objects and cards
+ * Visual constants for cosmic objects and cards
  */
 
 // Rarity color gradients for card borders
@@ -21,7 +21,7 @@ export const RARITY_ACCENT_COLORS: Record<Rarity, string> = {
 };
 
 // Type emoji icons
-export const TYPE_ICONS: Record<CelestialObjectType, string> = {
+export const TYPE_ICONS: Record<CosmicObjectType, string> = {
   Star: '⭐',
   Planet: '🪐',
   Moon: '🌕',
@@ -32,7 +32,7 @@ export const TYPE_ICONS: Record<CelestialObjectType, string> = {
 };
 
 // Type background colors (darker themed for contrast)
-export const TYPE_BACKGROUNDS: Record<CelestialObjectType, string> = {
+export const TYPE_BACKGROUNDS: Record<CosmicObjectType, string> = {
   Star: '#2f2a00',       // darker yellow-brown
   Planet: '#002f4f',     // darker blue
   Moon: '#2b2b2b',       // darker gray
@@ -43,7 +43,7 @@ export const TYPE_BACKGROUNDS: Record<CelestialObjectType, string> = {
 };
 
 // Translucent panel colors for readability over type backgrounds
-export const TYPE_PANEL_OVERLAY: Record<CelestialObjectType, string> = {
+export const TYPE_PANEL_OVERLAY: Record<CosmicObjectType, string> = {
   Star: 'rgba(255,255,255,0.14)',
   Planet: 'rgba(255,255,255,0.14)',
   Moon: 'rgba(255,255,255,0.14)',
@@ -55,20 +55,6 @@ export const TYPE_PANEL_OVERLAY: Record<CelestialObjectType, string> = {
 
 // Text color for cards (always light for dark backgrounds)
 export const CARD_TEXT_COLOR = '#ffffff';
-
-// Stats to show on front card (Pokemon-style: key stats only)
-// Maps celestial type to the stat keys that should appear on front
-export const FRONT_CARD_STATS: Record<CelestialObjectType, string[]> = {
-  Star: ['distance', 'temperature', 'mass'],
-  // Planets show their API-fetched stats on front (type, diameter, moons)
-  // If those don't exist, fallback to legacy stats (distance, size, temperature)
-  Planet: ['type', 'diameter', 'moons', 'surfaceTemperature', 'distance', 'size', 'temperature'],
-  Moon: ['distance', 'size', 'temperature'],
-  Galaxy: ['distance', 'size', 'mass'],
-  Exoplanet: ['distance', 'size', 'temperature'],
-  Nebula: ['distance', 'size', 'temperature'],
-  BlackHole: ['distance', 'mass', 'specialty'],
-};
 
 // Card dimensions
 export const CARD_DIMENSIONS = {
@@ -102,7 +88,7 @@ export const GRID_CONFIG = {
 };
 
 // Filter options
-export const FILTER_OPTIONS: Array<CelestialObjectType | 'All'> = [
+export const FILTER_OPTIONS: Array<CosmicObjectType | 'All'> = [
   'All',
   'Star',
   'Planet',

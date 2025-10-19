@@ -1,79 +1,80 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { CelestialObject } from "../../types";
+import { View, Text, StyleSheet, Image } from "react-native";
+import { CosmicObject } from "../../models";
 import {
   getTypeIcon,
   getTypePanelOverlay,
   getCardTextColor,
-  getFrontCardStats,
-  getCardFlavorText,
+  getRarityAccentColor,
 } from "../../utils";
 
 interface CardFrontProps {
-  object: CelestialObject;
+  object: CosmicObject;
 }
 
 const CardFront: React.FC<CardFrontProps> = ({ object }) => {
   const typeIcon = getTypeIcon(object.type);
   const panelColor = getTypePanelOverlay(object.type);
   const textColor = getCardTextColor(object.type);
-  const frontStats = getFrontCardStats(object);
-  const flavorText = getCardFlavorText(object);
+  const rarityColor = getRarityAccentColor(object.rarity);
+
+  // Create dynamic styles based on object type
+  const dynamicStyles = StyleSheet.create({
+    panelWithBackground: {
+      backgroundColor: panelColor,
+    },
+    textWithColor: {
+      color: textColor,
+    },
+    rarityTextWithColor: {
+      color: rarityColor,
+    },
+  });
 
   return (
     <View style={styles.container}>
-      {/* Header Row - Full Width */}
-      <View style={[styles.headerContainer, { backgroundColor: panelColor }]}>
+      {/* Header Row - Name and Type */}
+      <View style={[styles.headerContainer, dynamicStyles.panelWithBackground]}>
         <View style={styles.headerRow}>
-          <Text style={[styles.name, { color: textColor }]} numberOfLines={1}>
+          <Text
+            style={[styles.name, dynamicStyles.textWithColor]}
+            numberOfLines={1}
+          >
             {object.name}
           </Text>
-          <Text style={[styles.type, { color: textColor }]}>
+          <Text style={[styles.type, dynamicStyles.textWithColor]}>
             {typeIcon} {object.type}
           </Text>
         </View>
       </View>
 
-      {/* Large Image Container */}
-      <View style={[styles.imageContainer, { backgroundColor: panelColor }]}>
-        <Text style={styles.emoji}>{object.image}</Text>
-      </View>
-
-      {/* Spacer */}
-      <View style={{ flex: 1 }} />
-
-      {/* Flavor Text */}
-      <View style={[styles.flavorContainer, { backgroundColor: panelColor }]}>
-        <Text
-          style={[styles.flavorText, { color: textColor }]}
-          numberOfLines={3}
-        >
-          {flavorText}
+      {/* Rarity Badge */}
+      <View style={[styles.rarityContainer, dynamicStyles.panelWithBackground]}>
+        <Text style={[styles.rarityText, dynamicStyles.rarityTextWithColor]}>
+          ★ {object.rarity}
         </Text>
       </View>
 
-      {/* Key Stats */}
-      <View style={[styles.statsContainer, { backgroundColor: panelColor }]}>
-        {frontStats.length === 0 ? (
-          <Text style={[styles.noStats, { color: textColor }]}>
-            No stats available
-          </Text>
+      {/* Large Image Container */}
+      <View style={[styles.imageContainer, dynamicStyles.panelWithBackground]}>
+        {object.imageUrl ? (
+          <Image
+            source={{ uri: object.imageUrl }}
+            style={styles.planetImage}
+            resizeMode="contain"
+          />
         ) : (
-          frontStats.map((stat) => (
-            <View key={stat.key} style={styles.statRow}>
-              <Text style={[styles.statKey, { color: textColor }]}>
-                {stat.displayKey}
-              </Text>
-              <Text style={[styles.statValue, { color: textColor }]}>
-                {stat.value}
-              </Text>
-            </View>
-          ))
+          <Text style={styles.emoji}>{typeIcon}</Text>
         )}
       </View>
 
+      {/* Spacer */}
+      <View style={styles.spacer} />
+
       {/* Flip Hint */}
-      <Text style={[styles.flipHint, { color: textColor }]}>Tap to flip</Text>
+      <Text style={[styles.flipHint, dynamicStyles.textWithColor]}>
+        Tap to flip
+      </Text>
     </View>
   );
 };
@@ -107,63 +108,45 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
   },
+  rarityContainer: {
+    width: "100%",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 12,
+    alignItems: "center",
+  },
+  rarityText: {
+    fontSize: 16,
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 1,
+  },
   imageContainer: {
     width: "88%",
-    height: "42%",
+    height: "60%",
     borderWidth: 2,
     borderColor: "rgba(255,255,255,0.2)",
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
+    overflow: "hidden",
+  },
+  planetImage: {
+    width: "100%",
+    height: "100%",
   },
   emoji: {
-    fontSize: 80,
-  },
-  flavorContainer: {
-    width: "100%",
-    minHeight: 48,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.15)",
-    borderRadius: 6,
-    padding: 10,
-    marginBottom: 10,
-  },
-  flavorText: {
-    fontSize: 12,
-    lineHeight: 16,
-  },
-  statsContainer: {
-    width: "100%",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.15)",
-    borderRadius: 6,
-    padding: 10,
-    marginBottom: 8,
-  },
-  statRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 6,
-  },
-  statKey: {
-    fontSize: 13,
-    fontWeight: "600",
-    textTransform: "capitalize",
-  },
-  statValue: {
-    fontSize: 13,
-    fontWeight: "700",
-  },
-  noStats: {
-    fontSize: 12,
-    fontStyle: "italic",
-    opacity: 0.7,
+    fontSize: 100,
   },
   flipHint: {
     fontSize: 11,
     opacity: 0.6,
     marginTop: 4,
+  },
+  spacer: {
+    flex: 1,
   },
 });
 
