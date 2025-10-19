@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, StyleSheet, Pressable, Animated } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { CelestialObject } from "../../types";
+import { CosmicObject } from "../../models";
 import {
   getRarityColors,
   getTypeBackground,
@@ -10,13 +10,13 @@ import {
 import CardFront from "./CardFront";
 import CardBack from "./CardBack";
 
-interface DetailedCardProps {
-  object: CelestialObject;
+interface FlippableCardProps {
+  object: CosmicObject;
   onClose?: () => void;
   initialSide?: "front" | "back";
 }
 
-const DetailedCard: React.FC<DetailedCardProps> = ({
+const FlippableCard: React.FC<FlippableCardProps> = ({
   object,
   onClose,
   initialSide = "front",
@@ -149,4 +149,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailedCard;
+export default FlippableCard;
