@@ -2,6 +2,7 @@
  * Central export for all services
  */
 
-export * from './apiMapper';
 export * from './cacheService';
-export * from './dataService';
+export { catalogService, CatalogService } from './CatalogService';
+export * from './providers';
+export * from './mappers';

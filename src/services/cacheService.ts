@@ -86,6 +86,7 @@ export class CacheService {
       await Promise.all(
         Object.values(CACHE_KEYS).map(key => AsyncStorage.removeItem(key))
       );
+      
       console.log('🧹 All caches cleared');
     } catch (error) {
       console.error('Failed to clear all caches:', error);

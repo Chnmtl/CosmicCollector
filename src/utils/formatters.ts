@@ -87,16 +87,25 @@ export function formatTemperature(kelvin: number): string {
 
 /**
  * Format orbital period with appropriate unit
+ * Handles negative values (retrograde orbits)
  */
 export function formatOrbitalPeriod(days: number): string {
-  if (days < 1) {
-    return `${(days * 24).toFixed(1)} hours`;
-  } else if (days < 365) {
-    return `${days.toFixed(0)} Earth days`;
+  // Handle retrograde orbits (negative period indicates retrograde)
+  const isRetrograde = days < 0;
+  const absDays = Math.abs(days);
+  
+  let formattedPeriod: string;
+  
+  if (absDays < 1) {
+    formattedPeriod = `${(absDays * 24).toFixed(1)} hours`;
+  } else if (absDays < 365) {
+    formattedPeriod = `${absDays.toFixed(0)} Earth days`;
   } else {
-    const years = days / 365.25;
-    return `${years.toFixed(1)} Earth years`;
+    const years = absDays / 365.25;
+    formattedPeriod = `${years.toFixed(1)} Earth years`;
   }
+  
+  return isRetrograde ? `${formattedPeriod} (retrograde)` : formattedPeriod;
 }
 
 /**

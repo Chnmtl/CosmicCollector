@@ -1,9 +1,7 @@
 /**
  * Main API exports
- * Re-exports all API functions and types
+ * Re-exports all API clients and types
  */
 
-export { fetchPlanetaryData } from './solarSystem';
-export { fetchPlanetImage, fetchImageFromWikipedia } from './images';
-export { fetchPlanetLore } from './wikipedia';
-export type { SolarSystemPlanetResponse } from './types';
+export * from './clients';
+export type { SolarSystemPlanetResponse, WikipediaExtract } from './types';

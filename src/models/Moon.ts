@@ -13,18 +13,15 @@ export interface MoonData {
   
   // Physical properties
   diameter?: number; // in kilometers
-  mass?: number; // in Earth's moon masses
+  mass?: number; // in kilograms (kg)
   density?: number; // in g/cm³
   gravity?: number; // in m/s²
   
   // Orbital properties
   orbitalPeriod?: number; // in Earth days
   distanceFromPlanet?: number; // in kilometers
-  
-  // Surface
-  surfaceType?: string; // "Icy", "Rocky", "Volcanic", etc.
-  surfaceTemperature?: number; // in Kelvin
-  atmosphere?: string;
+  eccentricity?: number; // orbital shape: 0=circle, 1=parabola (used for moon type classification)
+  inclination?: number; // orbital tilt in degrees (used for moon type classification)
   
   // Discovery
   discoveredBy?: string;

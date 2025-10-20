@@ -2,11 +2,12 @@ import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { CosmicObject } from "../../models";
 import {
-  getTypeIcon,
   getTypePanelOverlay,
   getCardTextColor,
   getRarityAccentColor,
+  getTypeIcon,
 } from "../../utils";
+import CardHeader from "./CardHeader";
 
 interface CardFrontProps {
   object: CosmicObject;
@@ -33,20 +34,12 @@ const CardFront: React.FC<CardFrontProps> = ({ object }) => {
 
   return (
     <View style={styles.container}>
-      {/* Header Row - Name and Type */}
-      <View style={[styles.headerContainer, dynamicStyles.panelWithBackground]}>
-        <View style={styles.headerRow}>
-          <Text
-            style={[styles.name, dynamicStyles.textWithColor]}
-            numberOfLines={1}
-          >
-            {object.name}
-          </Text>
-          <Text style={[styles.type, dynamicStyles.textWithColor]}>
-            {typeIcon} {object.type}
-          </Text>
-        </View>
-      </View>
+      {/* Shared Header Component */}
+      <CardHeader
+        object={object}
+        textColor={textColor}
+        backgroundColor={panelColor}
+      />
 
       {/* Rarity Badge */}
       <View style={[styles.rarityContainer, dynamicStyles.panelWithBackground]}>
@@ -84,29 +77,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-  },
-  headerContainer: {
-    width: "100%",
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    marginBottom: 12,
-  },
-  headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-  },
-  name: {
-    fontSize: 18,
-    fontWeight: "700",
-    flex: 1,
-    marginRight: 8,
-  },
-  type: {
-    fontSize: 14,
-    fontWeight: "600",
   },
   rarityContainer: {
     width: "100%",

@@ -13,10 +13,17 @@ import ProgressBar from "../components/ProgressBar";
 
 const MissionsScreen: React.FC = () => {
   const { progress } = usePlayerStore();
-  const { getDiscoveredObjects, resetCollection } = useCollectionStore();
+  const { getDiscoveredObjects, resetCollection, loadCatalog } =
+    useCollectionStore();
 
   // Get discovered objects
   const discoveredObjects = getDiscoveredObjects();
+
+  // Handle reset with cache clearing and catalog reload
+  const handleReset = async () => {
+    await resetCollection(); // This now also clears all caches
+    await loadCatalog(); // Reload fresh data from API
+  };
 
   const getMissionProgress = (mission: any) => {
     switch (mission.type) {
@@ -166,15 +173,15 @@ const MissionsScreen: React.FC = () => {
           <Text style={styles.debugTitle}>🛠️ Debug Tools</Text>
           <TouchableOpacity
             style={styles.clearButton}
-            onPress={() => resetCollection()}
+            onPress={handleReset}
             activeOpacity={0.7}
           >
             <Text style={styles.clearButtonText}>
-              🧹 Clear All Discovered Objects
+              🧹 Clear All Discovered Objects & Cache
             </Text>
           </TouchableOpacity>
           <Text style={styles.debugInfo}>
-            Use this to reset and test object discovery from scratch
+            Clears discoveries and all cached data, then reloads fresh from API
           </Text>
         </View>
       </ScrollView>

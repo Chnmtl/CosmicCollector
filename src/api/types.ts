@@ -6,7 +6,7 @@ export interface SolarSystemPlanetResponse {
   id: string;
   englishName: string;
   moons: Array<{ moon: string; rel: string }> | null;
-  semimajorAxis: number; // km - distance from sun
+  semimajorAxis: number; // km - distance from sun/planet
   mass: { massValue: number; massExponent: number };
   density: number; // g/cm³
   gravity: number; // m/s²
@@ -16,8 +16,10 @@ export interface SolarSystemPlanetResponse {
   avgTemp: number; // Kelvin
   discoveredBy: string;
   discoveryDate: string;
-  // Optional for moons
-  eccentricity?: number; // for determining moon type (regular vs irregular)
+  // Moon-specific fields
+  eccentricity?: number; // orbital shape (for moon type classification)
+  inclination?: number; // orbital tilt in degrees (for moon type classification)
+  aroundPlanet?: { planet: string; rel: string }; // parent planet for moons
 }
 
 export interface NASAImageResult {

@@ -2,18 +2,17 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { CosmicObject } from "../../models";
 import {
-  getTypeIcon,
   getTypePanelOverlay,
   getCardTextColor,
   getObjectStats,
 } from "../../utils";
+import CardHeader from "./CardHeader";
 
 interface CardBackProps {
   object: CosmicObject;
 }
 
 const CardBack: React.FC<CardBackProps> = ({ object }) => {
-  const typeIcon = getTypeIcon(object.type);
   const panelColor = getTypePanelOverlay(object.type);
   const textColor = getCardTextColor(object.type);
   const stats = getObjectStats(object);
@@ -30,20 +29,12 @@ const CardBack: React.FC<CardBackProps> = ({ object }) => {
 
   return (
     <View style={styles.container}>
-      {/* Header - Name and Type */}
-      <View style={[styles.headerContainer, dynamicStyles.panelWithBackground]}>
-        <View style={styles.headerRow}>
-          <Text
-            style={[styles.name, dynamicStyles.textWithColor]}
-            numberOfLines={1}
-          >
-            {object.name}
-          </Text>
-          <Text style={[styles.type, dynamicStyles.textWithColor]}>
-            {typeIcon} {object.type}
-          </Text>
-        </View>
-      </View>
+      {/* Shared Header Component */}
+      <CardHeader
+        object={object}
+        textColor={textColor}
+        backgroundColor={panelColor}
+      />
 
       {/* Lore/Description Section - More lines for better readability */}
       <View style={[styles.loreContainer, dynamicStyles.panelWithBackground]}>
@@ -104,29 +95,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     paddingBottom: 6,
-  },
-  headerContainer: {
-    width: "100%",
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    marginBottom: 6,
-  },
-  headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: "700",
-    flex: 1,
-    marginRight: 8,
-  },
-  type: {
-    fontSize: 13,
-    fontWeight: "600",
   },
   loreContainer: {
     width: "100%",

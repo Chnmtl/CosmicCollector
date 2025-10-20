@@ -50,17 +50,30 @@ export const getObjectStats = (
     const moon = object as Moon;
     const data = moon.moonData;
 
+    // Moon Classification (first for prominence)
+    if (object.subtype) stats["Moon Type"] = object.subtype; // Regular, Irregular, or Captured Asteroid
+    
+    // Physical properties
     if (data.diameter) stats["Diameter"] = formatDiameter(data.diameter);
     if (data.mass) stats["Mass"] = formatMass(data.mass, "Moon");
-    if (data.orbitalPeriod)
-      stats["Orbital Period"] = formatOrbitalPeriod(data.orbitalPeriod);
+    if (data.density) stats["Density"] = `${data.density.toFixed(2)} g/cm³`;
+    if (data.gravity) stats["Gravity"] = `${data.gravity.toFixed(2)} m/s²`;
+    
+    // Orbital properties
     if (data.distanceFromPlanet)
       stats["Distance from Planet"] = formatDistance(
         data.distanceFromPlanet,
         "planet"
       );
-    if (data.surfaceTemperature)
-      stats["Temperature"] = formatTemperature(data.surfaceTemperature);
+    if (data.orbitalPeriod)
+      stats["Orbital Period"] = formatOrbitalPeriod(data.orbitalPeriod);
+    
+    // Discovery info
+    if (data.discoveredBy) stats["Discovered By"] = data.discoveredBy;
+    if (data.discoveryDate) stats["Discovery Date"] = data.discoveryDate;
+    
+    // Note: Eccentricity and Inclination are used internally for moon type classification only
+    // Note: Surface temperature not available for moons in API
   } else if (object.type === "Star" && "starData" in object) {
     const star = object as Star;
     const data = star.starData;

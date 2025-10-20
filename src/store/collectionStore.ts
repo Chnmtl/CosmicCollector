@@ -7,7 +7,7 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CosmicObject, CosmicObjectType, Rarity } from '../models';
-import { CosmicDataService } from '../services';
+import { catalogService } from '../services/CatalogService';
 
 interface CollectionStats {
   totalDiscovered: number;
@@ -75,7 +75,7 @@ export const useCollectionStore = create<CollectionStore>((set, get) => ({
     set({ isLoading: true });
     
     try {
-      const catalogMap = await CosmicDataService.fetchAllObjects();
+      const catalogMap = await catalogService.loadAll();
       set({ catalog: catalogMap, isLoading: false });
       console.log(`📚 Catalog loaded: ${catalogMap.size} objects`);
     } catch (error) {
@@ -211,6 +211,10 @@ export const useCollectionStore = create<CollectionStore>((set, get) => ({
       stats: initialStats,
     });
     await AsyncStorage.removeItem('collection');
-    console.log('🧹 Collection reset');
+    
+    // Also clear all API caches (planets, moons, stars)
+    await catalogService.clearAllCaches();
+    
+    console.log('🧹 Collection reset and all caches cleared');
   },
 }));
