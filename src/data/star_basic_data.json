@@ -1,0 +1,251 @@
+{
+  "O": [
+    { "name": "Zeta Puppis (Naos)", "rarity": "Rare" },
+    {
+      "name": "Alnitak (Zeta Orionis)",
+      "rarity": "Rare",
+      "designation": "Aa"
+    },
+    {
+      "name": "Theta1 Orionis C",
+      "rarity": "Rare",
+      "designation": "C1"
+    },
+    { "name": "Zeta Ophiuchi", "rarity": "Uncommon" },
+    { "name": "Lambda Cephei", "rarity": "Uncommon" },
+    { "name": "10 Lacertae", "rarity": "Uncommon" },
+    { "name": "Mu Columbae", "rarity": "Uncommon" }
+  ],
+
+  "B": [
+    {
+      "name": "Rigel",
+      "rarity": "Legendary",
+      "designation": "A"
+    },
+    {
+      "name": "Hadar",
+      "rarity": "Rare",
+      "designation": "Aa"
+    },
+    { "name": "Alnilam", "rarity": "Rare" },
+    {
+      "name": "Spica",
+      "rarity": "Rare",
+      "designation": "A"
+    },
+    {
+      "name": "Achernar",
+      "rarity": "Rare",
+      "designation": "A"
+    },
+    { "name": "Regulus", "rarity": "Uncommon" },
+    { "name": "Bellatrix", "rarity": "Uncommon" },
+    { "name": "Elnath", "rarity": "Uncommon" },
+    { "name": "Zeta Persei", "rarity": "Uncommon" },
+    { "name": "Aludra", "rarity": "Uncommon" },
+    {
+      "name": "Shaula",
+      "rarity": "Uncommon",
+      "designation": "Aa1"
+    }
+  ],
+
+  "A": [
+    { "name": "Canopus", "rarity": "Legendary" },
+    { "name": "Vega", "rarity": "Rare" },
+    {
+      "name": "Sirius",
+      "rarity": "Rare",
+      "designation": "A"
+    },
+    { "name": "Fomalhaut", "rarity": "Rare" },
+    { "name": "Beta Pictoris", "rarity": "Rare" },
+    { "name": "Altair", "rarity": "Uncommon" },
+    {
+      "name": "Castor",
+      "rarity": "Uncommon",
+      "designation": "Aa"
+    },
+    { "name": "Denebola", "rarity": "Uncommon" },
+    { "name": "Alderamin", "rarity": "Common" },
+    { "name": "Alioth", "rarity": "Common" }
+  ],
+
+  "F": [
+    {
+      "name": "Polaris",
+      "rarity": "Rare",
+      "designation": "Aa"
+    },
+    {
+      "name": "Tau Boötis",
+      "rarity": "Uncommon",
+      "designation": "A"
+    },
+    {
+      "name": "Procyon",
+      "rarity": "Uncommon",
+      "designation": "A"
+    },
+    { "name": "Mirfak", "rarity": "Uncommon" },
+    { "name": "Beta Virginis", "rarity": "Common" },
+    { "name": "Beta Comae Berenices", "rarity": "Common" },
+    { "name": "Theta Cygni", "rarity": "Common", "designation": "A" }
+  ],
+
+  "G": [
+    {
+      "name": "Alpha Centauri",
+      "rarity": "Rare",
+      "designation": "A"
+    },
+    {
+      "name": "Capella",
+      "rarity": "Rare",
+      "designation": "Aa"
+    },
+    { "name": "51 Pegasi", "rarity": "Rare" },
+    { "name": "Sun (Sol)", "rarity": "Uncommon" },
+    { "name": "Tau Ceti", "rarity": "Uncommon" },
+    {
+      "name": "Zeta Herculis",
+      "rarity": "Common",
+      "designation": "A"
+    },
+    {
+      "name": "Mu Herculis",
+      "rarity": "Common",
+      "designation": "Aa"
+    },
+    {
+      "name": "Eta Cassiopeiae",
+      "rarity": "Common",
+      "designation": "A"
+    },
+    {
+      "name": "Xi Boötis",
+      "rarity": "Common",
+      "designation": "A"
+    }
+  ],
+
+  "K": [
+    { "name": "Arcturus", "rarity": "Rare" },
+    {
+      "name": "Aldebaran",
+      "rarity": "Rare",
+      "designation": "A"
+    },
+    { "name": "Pollux", "rarity": "Uncommon" },
+    {
+      "name": "Epsilon Eridani",
+      "rarity": "Uncommon"
+    },
+    {
+      "name": "Epsilon Indi",
+      "rarity": "Uncommon",
+      "designation": "A"
+    },
+    {
+      "name": "Gamma Draconis (Eltanin)",
+      "rarity": "Uncommon"
+    },
+    { "name": "Beta Ceti (Diphda)", "rarity": "Uncommon" },
+    {
+      "name": "Iota Draconis (Edasich)",
+      "rarity": "Uncommon"
+    },
+    {
+      "name": "61 Cygni",
+      "rarity": "Common",
+      "designation": "A"
+    },
+    { "name": "Beta Ophiuchi (Cebalrai)", "rarity": "Common" }
+  ],
+
+  "M": [
+    { "name": "Mira (Omicron Ceti)", "rarity": "Rare" },
+    {
+      "name": "Ras Algethi (Alpha Herculis)",
+      "rarity": "Rare",
+      "designation": "A"
+    },
+    { "name": "Proxima Centauri", "rarity": "Uncommon" },
+    {
+      "name": "Barnard’s Star",
+      "rarity": "Uncommon"
+    },
+    { "name": "TRAPPIST-1", "rarity": "Uncommon" },
+    { "name": "Teegarden’s Star", "rarity": "Uncommon" },
+    { "name": "Gamma Crucis (Gacrux)", "rarity": "Uncommon" },
+    { "name": "Lalande 21185", "rarity": "Common" },
+    { "name": "Ross 128", "rarity": "Common" },
+    {
+      "name": "Groombridge 34",
+      "rarity": "Common",
+      "designation": "A"
+    },
+    { "name": "Luyten’s Star (GJ 273)", "rarity": "Common" },
+    { "name": "Gliese 581", "rarity": "Common" }
+  ],
+
+  "Carbon": [
+    {
+      "name": "R Leporis (Hind’s Crimson Star)",
+      "rarity": "Rare"
+    },
+    {
+      "name": "La Superba (Y Canum Venaticorum)",
+      "rarity": "Rare"
+    }
+  ],
+
+  "WR/LBV/Hypergiant": [
+    {
+      "name": "Eta Carinae",
+      "rarity": "Legendary",
+      "designation": "A"
+    },
+    {
+      "name": "Rho Cassiopeiae",
+      "rarity": "Legendary"
+    },
+    { "name": "Pistol Star", "rarity": "Legendary" },
+    {
+      "name": "VY Canis Majoris",
+      "rarity": "Legendary"
+    },
+    { "name": "UY Scuti", "rarity": "Legendary" },
+    { "name": "P Cygni", "rarity": "Rare" },
+    {
+      "name": "WR 104",
+      "rarity": "Rare",
+      "designation": "WR"
+    }
+  ],
+
+  "Subdwarf": [
+    { "name": "Kapteyn’s Star", "rarity": "Uncommon" },
+    { "name": "HD 149382", "rarity": "Rare" }
+  ],
+
+  "White Dwarf": [
+    { "name": "Van Maanen’s Star", "rarity": "Rare" },
+    {
+      "name": "Stein 2051",
+      "rarity": "Rare",
+      "designation": "B"
+    }
+  ],
+
+  "Neutron/Pulsar/Magnetar": [
+    {
+      "name": "Crab Pulsar (PSR B0531+21)",
+      "rarity": "Legendary"
+    },
+    { "name": "SGR 1806−20", "rarity": "Legendary" },
+    { "name": "Vela Pulsar (PSR B0833−45)", "rarity": "Rare" },
+    { "name": "PSR B1919+21", "rarity": "Rare" }
+  ]
+}

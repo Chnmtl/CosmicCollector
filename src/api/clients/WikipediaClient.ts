@@ -6,7 +6,7 @@ import { WikipediaExtract } from '../types';
  * Single Responsibility Principle: Only handles HTTP communication with Wikipedia
  */
 export class WikipediaClient {
-  private readonly baseUrl = 'https://en.wikipedia.org/w/api.php';
+  private readonly wikipediaBaseUrl = 'https://en.wikipedia.org/w/api.php';
   private readonly requestTimeout = 10000; // 10 seconds
 
   /**
@@ -70,7 +70,7 @@ export class WikipediaClient {
         origin: '*'
       });
 
-      const response = await fetch(`${this.baseUrl}?${params}`, {
+      const response = await fetch(`${this.wikipediaBaseUrl}?${params}`, {
         headers: {
           'User-Agent': 'CosmicCollectorApp/1.0 (Educational; github.com/Chnmtl)',
           'Accept': 'application/json',

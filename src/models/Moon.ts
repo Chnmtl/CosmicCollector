@@ -36,10 +36,3 @@ export interface Moon extends CosmicObject {
   subtype: MoonType;
   moonData: MoonData;
 }
-
-/**
- * Type guard
- */
-export function isMoon(obj: CosmicObject): obj is Moon {
-  return obj.type === 'Moon';
-}

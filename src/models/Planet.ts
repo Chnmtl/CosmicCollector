@@ -20,7 +20,7 @@ export interface PlanetData {
   rotationPeriod?: number; // in hours (day length)
   
   // Environmental
-  surfaceTemperature?: number; // in Kelvin
+  surfaceTemperature?: number; // in Kelvin (stored internally, displayed as Celsius)
   atmosphere?: string; // Composition description
   
   // Features
@@ -40,16 +40,4 @@ export interface Planet extends CosmicObject {
   type: 'Planet';
   subtype: PlanetType; // More specific than optional string
   planetData: PlanetData;
-}
-
-/**
- * Planet without discovery state (for catalog/API layer)
- */
-export type PlanetCatalogEntry = Omit<Planet, 'discovered' | 'discoveredAt'>;
-
-/**
- * Type guard to check if an object is a Planet
- */
-export function isPlanet(obj: CosmicObject): obj is Planet {
-  return obj.type === 'Planet';
 }

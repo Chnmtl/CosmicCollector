@@ -52,7 +52,11 @@ const CardFront: React.FC<CardFrontProps> = ({ object }) => {
       <View style={[styles.imageContainer, dynamicStyles.panelWithBackground]}>
         {object.imageUrl ? (
           <Image
-            source={{ uri: object.imageUrl }}
+            source={
+              typeof object.imageUrl === "string"
+                ? { uri: object.imageUrl }
+                : object.imageUrl
+            }
             style={styles.planetImage}
             resizeMode="contain"
           />

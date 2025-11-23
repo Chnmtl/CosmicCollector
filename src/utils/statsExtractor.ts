@@ -78,16 +78,23 @@ export const getObjectStats = (
     const star = object as Star;
     const data = star.starData;
 
-    if (data.mass) stats["Mass"] = `${data.mass} Solar masses`;
-    if (data.radius) stats["Radius"] = `${data.radius} Solar radii`;
-    if (data.temperature)
-      stats["Temperature"] = formatTemperature(data.temperature);
-    if (data.luminosity)
-      stats["Luminosity"] = `${data.luminosity} Solar luminosities`;
-    if (data.age) stats["Age"] = `${data.age} billion years`;
-    if (data.distanceFromEarth)
-      stats["Distance"] = `${data.distanceFromEarth} light years`;
+    // Observational properties
     if (data.constellation) stats["Constellation"] = data.constellation;
+    if (data.apparentMagnitude) stats["Apparent Magnitude"] = data.apparentMagnitude.toFixed(2);
+    if (data.absoluteMagnitude) stats["Absolute Magnitude"] = data.absoluteMagnitude.toFixed(2);
+    if (data.spectralClass) stats["Spectral Class"] = data.spectralClass;
+    
+    // Physical properties
+    if (data.distance) stats["Distance"] = `${data.distance.toFixed(2)} ly`;
+    if (data.mass) stats["Mass"] = `${data.mass.toFixed(2)} M☉`;
+    if (data.radius) stats["Radius"] = `${data.radius.toFixed(2)} R☉`;
+    if (data.temperature) stats["Temperature"] = formatTemperature(data.temperature);
+    if (data.age) {
+      const ageInGyr = data.age / 1_000_000_000;
+      const formattedAge = ageInGyr % 1 === 0 ? ageInGyr.toFixed(0) : ageInGyr.toFixed(2);
+      stats["Age"] = `${formattedAge} Gyr`;
+    }
+    if (data.lifecycle) stats["Lifecycle"] = data.lifecycle;
   }
   // Future: Add Nebula, Black Hole, Exoplanet, etc.
 

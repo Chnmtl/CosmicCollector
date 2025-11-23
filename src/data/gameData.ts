@@ -106,6 +106,9 @@ export const MOON_GAME_DATA: Record<string, MoonGameData> = {
 // ============================================================================
 // STAR GAME DATA
 // ============================================================================
+// Note: Stars are loaded from stars.json which already contains rarity
+// This configuration is optional and can override/extend the static data
+// For now, we use empty loot arrays - loot system will be added later
 
 export interface StarGameData {
   rarity: Rarity;
@@ -113,30 +116,13 @@ export interface StarGameData {
 }
 
 export const STAR_GAME_DATA: Record<string, StarGameData> = {
-  Sun: {
-    rarity: 'Rare',
-    loot: ['Solar Flare', 'Helium-3', 'Fusion Energy', 'Solar Wind'],
-  },
-  'Proxima Centauri': {
-    rarity: 'Epic',
-    loot: ['Red Dwarf Material', 'Stellar Flare', 'Exoplanet Clues'],
-  },
-  'Alpha Centauri A': {
-    rarity: 'Epic',
-    loot: ['Binary System Data', 'Yellow Dwarf Matter', 'Habitable Zone'],
-  },
-  'Alpha Centauri B': {
-    rarity: 'Epic',
-    loot: ['Binary Companion Data', 'Orange Dwarf Material', 'Stellar Wind'],
-  },
-  Sirius: {
-    rarity: 'Legendary',
-    loot: ['White Dwarf Companion', 'Brightest Star Energy', 'Binary Data'],
-  },
-  Betelgeuse: {
-    rarity: 'Legendary',
-    loot: ['Red Supergiant Material', 'Pre-Supernova Data', 'Stellar Nebula'],
-  },
+  // Stars use rarity from stars.json by default
+  // Add entries here only if you want to override rarity or add custom loot
+  // Example:
+  // 'Sirius': {
+  //   rarity: 'Legendary',
+  //   loot: [],
+  // },
 };
 
 // ============================================================================

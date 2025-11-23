@@ -63,7 +63,11 @@ const CompactCard: React.FC<CompactCardProps> = ({ object, onPress }) => {
               >
                 {object.imageUrl ? (
                   <Image
-                    source={{ uri: object.imageUrl }}
+                    source={
+                      typeof object.imageUrl === "string"
+                        ? { uri: object.imageUrl }
+                        : object.imageUrl
+                    }
                     style={styles.planetImage}
                     resizeMode="contain"
                   />

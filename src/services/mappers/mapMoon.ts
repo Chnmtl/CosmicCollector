@@ -8,6 +8,7 @@ import { Moon, MoonData } from '../../models/Moon';
 import { SolarSystemPlanetResponse } from '../../api/types';
 import { MOON_GAME_DATA } from '../../data/gameData';
 import { getMoonType, calculateMoonRarity } from './utils';
+import { PLACEHOLDER_IMAGE } from '../../utils/constants';
 
 /**
  * Maps Solar System API response to Moon domain model
@@ -82,7 +83,7 @@ export function mapMoon(
     type: 'Moon',
     subtype: getMoonType(apiData),
     rarity: rarity,
-    imageUrl: undefined, // Will be added later if needed
+    imageUrl: PLACEHOLDER_IMAGE,
     loot: loot,
     description:
       description || `${name}, a ${getMoonType(apiData).toLowerCase()} moon orbiting ${parentPlanetName}.`,

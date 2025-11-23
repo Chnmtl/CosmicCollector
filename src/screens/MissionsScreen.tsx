@@ -12,16 +12,17 @@ import { defaultMissions } from "../data/missions";
 import ProgressBar from "../components/ProgressBar";
 
 const MissionsScreen: React.FC = () => {
-  const { progress } = usePlayerStore();
+  const { progress, resetProgress } = usePlayerStore();
   const { getDiscoveredObjects, resetCollection, loadCatalog } =
     useCollectionStore();
 
   // Get discovered objects
   const discoveredObjects = getDiscoveredObjects();
 
-  // Handle reset with cache clearing and catalog reload
+  // Handle reset with cache clearing, energy reset, and catalog reload
   const handleReset = async () => {
-    await resetCollection(); // This now also clears all caches
+    await resetCollection(); // This clears all caches and discoveries
+    await resetProgress(); // Reset player progress (energy, XP, level)
     await loadCatalog(); // Reload fresh data from API
   };
 
@@ -177,11 +178,12 @@ const MissionsScreen: React.FC = () => {
             activeOpacity={0.7}
           >
             <Text style={styles.clearButtonText}>
-              🧹 Clear All Discovered Objects & Cache
+              🧹 Clear All Progress & Cache
             </Text>
           </TouchableOpacity>
           <Text style={styles.debugInfo}>
-            Clears discoveries and all cached data, then reloads fresh from API
+            Clears discoveries, energy, XP, and cached data, then reloads fresh
+            from API
           </Text>
         </View>
       </ScrollView>

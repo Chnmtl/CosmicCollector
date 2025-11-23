@@ -22,24 +22,6 @@ export interface SolarSystemPlanetResponse {
   aroundPlanet?: { planet: string; rel: string }; // parent planet for moons
 }
 
-export interface NASAImageResult {
-  collection: {
-    items: Array<{
-      data: Array<{
-        title: string;
-        description: string;
-        date_created: string;
-        keywords?: string[];
-      }>;
-      links?: Array<{
-        href: string;
-        rel: string;
-        render?: string;
-      }>;
-    }>;
-  };
-}
-
 export interface WikipediaExtract {
   query?: {
     pages?: {
@@ -53,19 +35,4 @@ export interface WikipediaExtract {
       snippet?: string;
     }>;
   };
-}
-
-export interface WikipediaImageResponse {
-  title: string;
-  originalimage?: {
-    source: string;
-    width: number;
-    height: number;
-  };
-  thumbnail?: {
-    source: string;
-    width: number;
-    height: number;
-  };
-  extract?: string;
 }

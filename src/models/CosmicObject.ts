@@ -30,7 +30,7 @@ export interface CosmicObject {
   subtype?: string; // "Gas Giant", "Red Supergiant", "Spiral Galaxy", etc.
   
   // Visual representation
-  imageUrl?: string;
+  imageUrl?: string | number; // string for URI, number for require() result
   
   // Game mechanics (loot only - XP/energy/discoveryChance calculated from rarity)
   loot: string[];

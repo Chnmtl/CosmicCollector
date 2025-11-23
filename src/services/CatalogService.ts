@@ -14,13 +14,15 @@ import { SolarSystemClient } from '../api/clients/SolarSystemClient';
 import { WikipediaClient } from '../api/clients/WikipediaClient';
 import { PlanetProvider } from './providers/PlanetProvider';
 import { MoonProvider } from './providers/MoonProvider';
-import { PlanetCache, MoonCache } from './cacheService';
+import { StarProvider } from './providers/StarProvider';
+import { PlanetCache, MoonCache, StarCache } from './cacheService';
 
 export class CatalogService {
   private solarSystemClient: SolarSystemClient;
   private wikipediaClient: WikipediaClient;
   private planetProvider: PlanetProvider;
   private moonProvider: MoonProvider;
+  private starProvider: StarProvider;
 
   constructor() {
     console.log('🏗️ [CatalogService] Initializing...');
@@ -38,6 +40,7 @@ export class CatalogService {
       this.solarSystemClient,
       this.wikipediaClient
     );
+    this.starProvider = new StarProvider();
 
     console.log('✅ [CatalogService] Initialized');
   }
@@ -49,7 +52,7 @@ export class CatalogService {
    * Flow:
    * 1. Load planets (independent)
    * 2. Extract planet metadata
-   * 3. Load moons (depends on planet metadata)
+   * 3. Load moons (depends on planet metadata) and stars (independent) in parallel
    * 4. Future: Load other object types in parallel
    * 5. Combine into single catalog
    * 
@@ -67,18 +70,21 @@ export class CatalogService {
       const planetMetadata = await this.planetProvider.getMetadata();
       console.log(`   📋 Extracted metadata for ${planetMetadata.planetIds.length} planets`);
 
-      // Step 3: Load moons (depends on planet metadata)
-      const moons = await this.moonProvider.fetchAll(
-        planetMetadata.planetIds,
-        planetMetadata.planetNameMap
-      );
+      // Step 3: Load moons (depends on planets) and stars (independent) in parallel
+      const [moons, stars] = await Promise.all([
+        this.moonProvider.fetchAll(
+          planetMetadata.planetIds,
+          planetMetadata.planetNameMap
+        ),
+        this.starProvider.fetchAll(),
+      ]);
       console.log(`   ✅ Loaded ${moons.length} moons`);
+      console.log(`   ✅ Loaded ${stars.length} stars`);
 
-      // Step 4: Future - Load independent providers in parallel
-      // When adding exoplanets, stars, nebulae, etc., add them here:
-      // const [exoplanets, stars, nebulae] = await Promise.all([
+      // Step 4: Future - Load other independent providers in parallel
+      // When adding exoplanets, nebulae, etc., add them here:
+      // const [exoplanets, nebulae] = await Promise.all([
       //   this.exoplanetProvider.fetchAll(),
-      //   this.starProvider.fetchAll(),
       //   this.nebulaProvider.fetchAll(),
       // ]);
 
@@ -86,12 +92,12 @@ export class CatalogService {
       const catalog = new Map<string, CosmicObject>();
 
       // Add all objects to catalog
-      [...planets, ...moons].forEach((obj) => {
+      [...planets, ...moons, ...stars].forEach((obj) => {
         catalog.set(obj.id, obj);
       });
 
       console.log(`✅ [CatalogService] Catalog loaded: ${catalog.size} total objects`);
-      console.log(`   Breakdown: ${planets.length} planets, ${moons.length} moons`);
+      console.log(`   Breakdown: ${planets.length} planets, ${moons.length} moons, ${stars.length} stars`);
 
       return catalog;
     } catch (error) {
@@ -110,7 +116,8 @@ export class CatalogService {
     await Promise.all([
       PlanetCache.clear(),
       MoonCache.clear(),
-      // Future: ExoplanetCache.clear(), StarCache.clear(), etc.
+      StarCache.clear(),
+      // Future: ExoplanetCache.clear(), etc.
     ]);
 
     console.log('✅ [CatalogService] All caches cleared');

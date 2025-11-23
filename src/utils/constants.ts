@@ -87,6 +87,9 @@ export const GRID_CONFIG = {
   HORIZONTAL_PADDING: 40,
 };
 
+// Placeholder image for celestial objects
+export const PLACEHOLDER_IMAGE = require('../../assets/Earth-image.png');
+
 // Filter options
 export const FILTER_OPTIONS: Array<CosmicObjectType | 'All'> = [
   'All',

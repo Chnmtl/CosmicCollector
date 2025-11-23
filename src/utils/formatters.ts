@@ -79,9 +79,15 @@ export function formatDistance(km: number, context: 'sun' | 'planet' | 'earth' =
 
 /**
  * Format temperature based on value
- * Converts Kelvin to Celsius for display
+ * For high temperatures (stars), keep in Kelvin
+ * For low temperatures (planets/moons), convert to Celsius
  */
 export function formatTemperature(kelvin: number): string {
+  // Stars have very high temperatures (>5000 K), keep in Kelvin
+  if (kelvin > 5000) {
+    return `${kelvin.toLocaleString()} K`;
+  }
+  // Planets/moons have lower temperatures, convert to Celsius
   return kelvinToCelsius(kelvin);
 }
 

@@ -2,49 +2,36 @@ import { CosmicObject } from './CosmicObject';
 
 /**
  * Star-specific data structure
- * To be populated from future star API integration
  */
 
-export type StarType = 
-  | 'Main Sequence' 
-  | 'Red Giant' 
-  | 'White Dwarf' 
-  | 'Neutron Star' 
-  | 'Red Supergiant'
-  | 'Blue Supergiant';
+// Formal Name (wikipedia page name)
 
 export interface StarData {
-  // Physical properties
-  luminosity?: number; // in solar luminosities
-  temperature?: number; // in Kelvin
-  mass?: number; // in solar masses
-  radius?: number; // in solar radii
-  age?: number; // in billions of years
-  
-  // Position
-  constellation?: string;
-  distanceFromEarth?: number; // in light years
+  // Observational properties
+  constellation?: string; // e.g., "Canis Major", "Orion"
+  apparentMagnitude?: number; // How bright it appears from Earth (lower = brighter)
+  absoluteMagnitude?: number; // Intrinsic brightness at 10 parsecs
   
   // Spectral classification
-  spectralClass?: string; // "G2V", "M1V", etc.
+  spectralClass?: string; // e.g., "G2V", "M5V", "O9.5 Ia"
   
-  // Discovery
-  discoveredBy?: string;
-  discoveryDate?: string;
+  // Physical properties
+  distance?: number; // in light-years
+  mass?: number; // in solar masses (M☉)
+  radius?: number; // in solar radii (R☉)
+  temperature?: number; // in Kelvin
+  age?: number; // in years
+  
+  // Lifecycle stage 
+  lifecycle?: string; // e.g., "Main Sequence", "Red Giant", "White Dwarf", "Supergiant"
 }
 
 /**
  * Complete Star interface
+ * Combines base CosmicObject with star-specific astronomical data
  */
 export interface Star extends CosmicObject {
   type: 'Star';
-  subtype: StarType;
+  subtype: string; // Used for lifecycle or special classification (flexible)
   starData: StarData;
-}
-
-/**
- * Type guard
- */
-export function isStar(obj: CosmicObject): obj is Star {
-  return obj.type === 'Star';
 }
