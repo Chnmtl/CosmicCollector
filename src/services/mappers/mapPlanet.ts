@@ -8,7 +8,7 @@ import { Planet, PlanetData } from '../../models/Planet';
 import { SolarSystemPlanetResponse } from '../../api/types';
 import { PLANET_GAME_DATA } from '../../data/gameData';
 import { getPlanetType, PLANET_ATMOSPHERES, PLANET_RINGS } from './utils';
-import { PLACEHOLDER_IMAGE } from '../../utils/constants';
+import { getPlanetImage } from '../../utils/imageResolver';
 
 /**
  * Maps Solar System API response to Planet domain model
@@ -64,7 +64,7 @@ export function mapPlanet(
     type: 'Planet',
     subtype: getPlanetType(name),
     rarity: rarity,
-    imageUrl: PLACEHOLDER_IMAGE,
+    imageUrl: getPlanetImage(name),
     loot: loot,
     description: description || `${name}, a fascinating world in our solar system.`,
     facts: [],

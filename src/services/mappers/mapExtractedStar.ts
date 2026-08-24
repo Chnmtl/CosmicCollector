@@ -9,7 +9,7 @@
 
 import { Star, StarData } from '../../models/Star';
 import { STAR_GAME_DATA } from '../../data/gameData';
-import { PLACEHOLDER_IMAGE } from '../../utils/constants';
+import { getDefaultImageForType } from '../../utils/imageResolver';
 import { Rarity } from '../../models/CosmicObject';
 
 /**
@@ -285,7 +285,7 @@ export function mapExtractedStar(extractedData: ExtractedStarData): Star {
     type: 'Star',
     subtype: starData.lifecycle || starData.spectralClass || 'Star',
     rarity,
-    imageUrl: PLACEHOLDER_IMAGE,
+    imageUrl: getDefaultImageForType('Star'),
     loot,
     description: lore || generateDescription(extractedData),
     facts: generateFacts(extractedData),
