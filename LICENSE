@@ -1,21 +1,37 @@
-MIT License
+Copyright (c) 2025-2026 Cihan Mutlu. All rights reserved.
 
-Copyright (c) 2025 Cihan Mutlu
+Cosmic Collector — proprietary, all rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This source code is published publicly for the sole purposes of demonstration,
+portfolio review, and personal, non-commercial evaluation. It is NOT open-source
+software.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+No license or permission, express or implied, is granted to any person to use,
+copy, modify, merge, publish, distribute, sublicense, run as a service, or sell
+copies of this software, its artwork, or any portion of it, except with the
+prior written permission of the copyright holder. You may view the source for
+evaluation purposes only.
+
+This license applies to the original source code of this project authored by the
+copyright holder. It does NOT grant any rights to, and is separate from:
+
+  - The moon card artwork in assets/moons/, created by Ege Gülsoy
+    (github.com/fautzin) and used here with permission. Copyright in that
+    artwork is retained by its author. It may not be used, copied, modified or
+    redistributed without his permission.
+  - Third-party libraries and dependencies, which remain under their own
+    respective licenses.
+  - Astronomical measurements and reference data retrieved from the Solar System
+    OpenData API (api.le-systeme-solaire.net) and from Wikipedia. This is
+    factual reference material, subject to the terms of its own sources, and is
+    neither claimed as nor redistributed as original work by this project.
+  - Any third-party imagery, trademarks or mission data (e.g. NASA, ESA), which
+    remain the property of their respective owners.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHOR BE
+LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+For permissions beyond the scope of this notice, contact: cihanmutlu.dev@gmail.com

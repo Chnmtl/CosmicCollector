@@ -4,8 +4,6 @@ A React Native (Expo) collectible-card game built on **real astronomical data**.
 
 **Catalog: 148 objects** — 8 planets and 60 moons from the [Solar System OpenData API](https://api.le-systeme-solaire.net/), plus 80 stars from a dataset compiled from Wikipedia.
 
-<!-- TODO: add a screenshot here — e.g. ![Cosmic Collector](docs/screenshot.png) -->
-
 ## Screens
 
 | Screen | What it does |
@@ -80,7 +78,9 @@ scripts/extractStars.js   Spreadsheet → stars.json
 
 ## Artwork
 
-Cards use bundled artwork resolved by `src/utils/imageResolver.ts`: dedicated images for 43 of the 60 moons and for Earth, and a generated default image per object type (star, planet, moon, galaxy, exoplanet, nebula, black hole) for everything else.
+Moon card art by **[Ege Gülsoy (@fautzin)](https://github.com/fautzin)**, used with permission — covering 43 of the 60 moons in the catalog. Everything else falls back to a default image per object type (star, planet, moon, galaxy, exoplanet, nebula, black hole).
+
+Lookup lives in `src/utils/imageResolver.ts`. Metro needs literal `require` paths, so the moon and planet maps are static; adding new art means adding both the file and its map entry.
 
 ## Roadmap
 
@@ -91,8 +91,11 @@ Cards use bundled artwork resolved by `src/utils/imageResolver.ts`: dedicated im
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+**Proprietary — all rights reserved.** This repository is public so the code can be read and reviewed, not so it can be reused. Viewing for evaluation is fine; using, copying, modifying, redistributing or running it as a service is not, without prior written permission. See [LICENSE](LICENSE).
 
-## Author
+The card artwork is separately the copyright of Ege Gülsoy and is not covered by any grant here. Astronomical data belongs to its sources ([Solar System OpenData](https://api.le-systeme-solaire.net/), Wikipedia) and is used as factual reference.
 
-**Cihan Mutlu** — [github.com/Chnmtl](https://github.com/Chnmtl)
+## Credits
+
+- **Cihan Mutlu** — [github.com/Chnmtl](https://github.com/Chnmtl) — code and design
+- **Ege Gülsoy** — [github.com/fautzin](https://github.com/fautzin) — card artwork
