@@ -13,8 +13,7 @@ if (!API_KEY) {
 
 /**
  * Solar System API HTTP Client
- * Responsibility: Make HTTP requests to Solar System API only
- * Single Responsibility Principle: Only handles HTTP communication
+ * Responsibility: Make HTTP requests to Solar System API
  */
 export class SolarSystemClient {
   private readonly baseUrl = 'https://api.le-systeme-solaire.net/rest/bodies';
@@ -22,7 +21,6 @@ export class SolarSystemClient {
 
   /**
    * Fetch all planets from the API
-   * Returns the 8 main planets (Mercury through Neptune)
    * The API's isPlanet=true filter excludes dwarf planets automatically
    */
   async getPlanets(): Promise<SolarSystemPlanetResponse[]> {
@@ -52,68 +50,72 @@ export class SolarSystemClient {
   }
 
   /**
-   * Fetch moons filtered by valid planet IDs
-   * Returns top 60 moons by size, only those orbiting the provided planets
-   * 
-   * @param validPlanetIds - Array of planet IDs to filter moons by
+   * Fetch moons filtered by valid planet IDs (server-side only)
+   * Uses multiple `filter[]` + `satisfy=any` to ask the API for moons that orbit
+   * any of the provided planet IDs. Returns top 60 by `meanRadius`.
+   *
+   * Minimal defensive checks: empty-array early return + ID normalization.
+   *
+   * @param validPlanetIds - Array of planet IDs to filter moons by (API ids like "jupiter")
    * @returns Top 60 moons sorted by size (largest first)
    */
   async getMoons(validPlanetIds: string[]): Promise<SolarSystemPlanetResponse[]> {
     console.log('🌙 [SolarSystemClient] Fetching moons...');
-    console.log(`   Valid planet IDs for filtering:`, validPlanetIds);
-    
-    const response = await fetch(
-      `${this.baseUrl}?filter[]=bodyType,eq,Moon`,
-      {
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+
+    // Minimal defensive checks
+    if (!Array.isArray(validPlanetIds) || validPlanetIds.length === 0) {
+      console.log('   No validPlanetIds provided — returning empty array');
+      return [];
+    }
+
+    const ids = validPlanetIds.map(id => String(id).trim().toLowerCase()).filter(Boolean);
+
+    // Build server-side filter query: bodyType=Moon + multiple aroundPlanet.planet filters + satisfy=any
+    const filters = [
+      'filter[]=bodyType,eq,Moon',
+      ...ids.map(id => `filter[]=aroundPlanet.planet,eq,${encodeURIComponent(id)}`),
+      'satisfy=any',
+    ];
+    const url = `${this.baseUrl}?${filters.join('&')}`;
+
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
-      throw new Error(
-        `Solar System API error: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Solar System API error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
-    const allMoons = data.bodies || [];
-    console.log(`   Received ${allMoons.length} total moons from API`);
+    const moons = Array.isArray(data.bodies) ? data.bodies : [];
+    console.log(`   Server-filtered: received ${moons.length} moons for ${ids.join(',')}`);
 
-    // Filter moons that orbit our valid planets
-    const filteredMoons = allMoons.filter((moon: SolarSystemPlanetResponse) => {
-      if (!moon.aroundPlanet?.planet) return false;
+    const validMoons = moons
+      .filter((m: SolarSystemPlanetResponse) => m && m.id && Number.isFinite(m.meanRadius) && m.meanRadius > 0)
+      .map((m: SolarSystemPlanetResponse) => ({ ...m, id: String(m.id) }));
 
-      // Extract planet ID from aroundPlanet field
-      // API returns either just ID ("jupiter") or URL ending with ID
-      const planetId = moon.aroundPlanet.planet.includes('/')
-        ? moon.aroundPlanet.planet.split('/').pop() || ''
-        : moon.aroundPlanet.planet;
+    // Dedupe by id (keep the largest if duplicates occur)
+    const seen = new Map<string, SolarSystemPlanetResponse>();
+    for (const m of validMoons) {
+      const existing = seen.get(m.id);
+      if (!existing || (m.meanRadius || 0) > (existing.meanRadius || 0)) seen.set(m.id, m);
+    }
 
-      return validPlanetIds.includes(planetId);
-    });
-
-    console.log(`   Filtered to ${filteredMoons.length} moons of valid planets`);
-
-    // Sort by size (largest first) and take top 60
-    const topMoons = filteredMoons
-      .filter((moon: SolarSystemPlanetResponse) => moon.meanRadius > 0)
-      .sort((a: SolarSystemPlanetResponse, b: SolarSystemPlanetResponse) => 
-        b.meanRadius - a.meanRadius
-      )
+    const result = Array.from(seen.values())
+      .sort((a, b) => (b.meanRadius || 0) - (a.meanRadius || 0))
       .slice(0, 60);
 
-    console.log(`✅ [SolarSystemClient] Returning top ${topMoons.length} moons by size`);
-    
-    if (topMoons.length > 0) {
+    console.log(`✅ [SolarSystemClient] Returning top ${result.length} moons by size (server-filtered)`);
+    if (result.length > 0) {
       console.log(
-        `   Size range: ${topMoons[0].meanRadius}km (${topMoons[0].englishName}) to ` +
-        `${topMoons[topMoons.length - 1].meanRadius}km (${topMoons[topMoons.length - 1].englishName})`
+        `   Size range: ${result[0].meanRadius}km (${result[0].englishName}) to ` +
+        `${result[result.length - 1].meanRadius}km (${result[result.length - 1].englishName})`
       );
     }
 
-    return topMoons;
+    return result;
   }
 }
