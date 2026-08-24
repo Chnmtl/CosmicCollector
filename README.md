@@ -16,7 +16,7 @@ Cards flip to reveal the object's real scientific data — mass, radius, gravity
 
 ## Architecture
 
-The data layer is the substance of this project. It is built in four stages so that adding a new object type means adding a provider and a mapper, not editing existing code:
+The data layer is built in four stages, so that adding a new object type means adding a provider and a mapper rather than editing existing code:
 
 ```
 API clients      →  providers        →  mappers          →  catalog service  →  Zustand stores
@@ -33,7 +33,7 @@ Notable pieces:
 - **Dependency-ordered loading.** `CatalogService` loads planets first, then fans out to moons (which need planet IDs) and stars in parallel.
 - **24-hour AsyncStorage cache** per object type, so the app is usable offline after first launch.
 - **Descriptions** are fetched from the Wikipedia REST API and merged into objects at map time.
-- **Star pipeline.** `scripts/extractStars.js` turns a source spreadsheet into `src/data/stars.json`; `mapExtractedStar` parses the messy string values ("25.3 ± 5.3 M☉", "2.2 - 3.56 Myr") into numbers.
+- **Star pipeline.** `scripts/extractStars.js` compiles a source spreadsheet into `src/data/stars.json`; `mapExtractedStar` parses its unit-bearing string values ("25.3 ± 5.3 M☉", "2.2 - 3.56 Myr") into typed numbers.
 
 ## Tech stack
 
@@ -55,7 +55,7 @@ cp .env.example .env      # then paste your key into .env
 npm run android   # or: npm run ios / npm run web
 ```
 
-> **Note:** `EXPO_PUBLIC_*` variables are baked in at bundle time. After changing `.env`, restart the dev server — a hot reload will not pick up a new key. An expired token shows up as `403` on every request.
+> `EXPO_PUBLIC_*` variables are inlined at bundle time — restart the dev server after changing `.env`.
 
 ## Project structure
 
@@ -78,15 +78,14 @@ scripts/extractStars.js   Spreadsheet → stars.json
 
 ## Artwork
 
-Moon card art by **[Ege Gülsoy (@fautzin)](https://github.com/fautzin)**, used with permission — covering 43 of the 60 moons in the catalog. Everything else falls back to a default image per object type (star, planet, moon, galaxy, exoplanet, nebula, black hole).
+Moon card art by **[Ege Gülsoy (@fautzin)](https://github.com/fautzin)**, used with permission. Objects without dedicated art use a default image for their type.
 
-Lookup lives in `src/utils/imageResolver.ts`. Metro needs literal `require` paths, so the moon and planet maps are static; adding new art means adding both the file and its map entry.
+`src/utils/imageResolver.ts` handles the lookup. Metro requires literal `require` paths, so the artwork maps are static.
 
 ## Roadmap
 
-- Artwork for the remaining moons and the seven other planets
-- Better Wikipedia description matching — some objects resolve to poor or wrong articles
-- Additional object types: galaxies, nebulae, exoplanets and black holes (models and defaults exist; providers do not yet)
+- Expanded card artwork
+- Additional object types: galaxies, nebulae, exoplanets and black holes
 - Sound effects and daily challenges
 
 ## License

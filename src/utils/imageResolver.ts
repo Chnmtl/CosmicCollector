@@ -25,14 +25,13 @@ export const TYPE_DEFAULT_IMAGES: Record<CosmicObjectType, ImageAsset> = {
 
 /**
  * Per-planet artwork, keyed by slugify(englishName).
- * Only Earth has a real photograph so far; the rest use the Planet default.
+ * Planets without an entry use the Planet default.
  */
-const PLANET_IMAGES: Record<string, ImageAsset> = {
-  earth: require('../../assets/planets/earth.png'),
-};
+const PLANET_IMAGES: Record<string, ImageAsset> = {};
+
 /**
  * Per-moon artwork, keyed by slugify(englishName).
- * Covers 43 of the 60 moons the catalog loads; the rest use the Moon default.
+ * Moons without an entry use the Moon default.
  */
 const MOON_IMAGES: Record<string, ImageAsset> = {
   amalthea: require('../../assets/moons/amalthea.png'),
