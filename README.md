@@ -6,7 +6,7 @@ A React Native (Expo) collectible-card game built on **real astronomical data**.
 
 | Explore | Collection | Missions |
 |:--:|:--:|:--:|
-| ![Explore screen](docs/screenshots/explore-screen.png) | ![Collection screen](docs/screenshots/collection-screen.png) | ![Missions screen](docs/screenshots/missions-screen.png) |
+| <img src="docs/screenshots/explore-screen.png" alt="Explore screen" width="220"> | <img src="docs/screenshots/collection-screen.png" alt="Collection screen" width="220"> | <img src="docs/screenshots/missions-screen.png" alt="Missions screen" width="220"> |
 
 ## Screens
 
@@ -20,7 +20,7 @@ Cards flip to reveal the object's real scientific data — mass, radius, gravity
 
 | Card front | Card back |
 |:--:|:--:|
-| ![Card front](docs/screenshots/card-front.png) | ![Card back](docs/screenshots/card-back.png) |
+| <img src="docs/screenshots/card-front.png" alt="Card front" width="240"> | <img src="docs/screenshots/card-back.png" alt="Card back" width="240"> |
 
 ## Architecture
 
