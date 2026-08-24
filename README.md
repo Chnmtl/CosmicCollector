@@ -1,205 +1,98 @@
 # 🌌 Cosmic Collector
 
-Cosmic Collector is a 2D space exploration and collectible card app built in React Native with Expo. Discover the wonders of the universe, collect celestial objects, and build your cosmic collection!
+A React Native (Expo) collectible-card game built on **real astronomical data**. Explore the universe, discover celestial objects, and complete your collection — every card is a real body with real measurements, pulled from live APIs rather than hardcoded.
 
-## ✨ Features
+**Catalog: 148 objects** — 8 planets and 60 moons from the [Solar System OpenData API](https://api.le-systeme-solaire.net/), plus 80 stars from a dataset compiled from Wikipedia.
 
-### 🚀 Core Gameplay
-- **Explore the Universe**: Tap to discover random celestial objects
-- **Collectible Cards**: Each object is a beautifully designed card with stats and lore
-- **Rarity System**: Common, Rare, Epic, and Legendary objects with different rewards
-- **XP & Progression**: Level up by discovering new objects
-- **Energy System**: Strategic gameplay with automatic energy refill over time
+<!-- TODO: add a screenshot here — e.g. ![Cosmic Collector](docs/screenshot.png) -->
 
-### 🎨 Visual Design
-- **Space Theme**: Dark gradient backgrounds with cosmic colors
-- **Card Animations**: Smooth flip animations and particle effects for rare discoveries
-- **Responsive UI**: Clean, modern interface optimized for mobile
-- **Visual Feedback**: Glowing elements, rarity-based colors, and smooth transitions
+## Screens
 
-### 📱 Three Main Screens
-1. **Explore Screen**: 
-   - Discovery mechanics with cooldown system
-   - Progress tracking (level, XP, energy)
-   - Animated card reveals with particle effects
-   
-2. **Collection Screen**: 
-   - Grid view of all discovered objects
-   - Filter by object type (Stars, Planets, Galaxies, etc.)
-   - Rarity statistics and collection progress
-   
-3. **Missions Screen**: 
-   - Achievement system with various challenges
-   - Progress tracking and rewards
-   - Completion badges and statistics
+| Screen | What it does |
+|---|---|
+| **Explore** | Spend energy to discover a random object, weighted by rarity. Animated card reveal with particle effects on rare finds. |
+| **Collection** | Grid of everything discovered, filterable by type and rarity, with completion stats. |
+| **Missions** | Nine achievements tracking discoveries, types collected and level milestones. |
 
-### 🌟 Celestial Objects
-**22 unique objects across 6 categories:**
-- **Stars**: Sol, Sirius, Betelgeuse, Vega, Rigel, Alpha Centauri
-- **Planets**: Earth, Mars, Jupiter, Venus, Saturn
-- **Moons**: Earth's Moon (placeholder), Europa, Titan (examples)
-- **Galaxies**: Milky Way, Andromeda, Whirlpool Galaxy
-- **Exoplanets**: Kepler-22b, Proxima Centauri b, TRAPPIST-1e
-- **Nebulae**: Orion Nebula, Crab Nebula, Horsehead Nebula
-- **Black Holes**: Sagittarius A*, Cygnus X-1
+Cards flip to reveal the object's real scientific data — mass, radius, gravity, orbital period, surface temperature, spectral class, distance — alongside a description and themed loot.
 
-Each object includes:
-- Real astronomical data and facts
-- Beautiful emoji representations
-- Rarity-based XP rewards
-- Themed loot items
-- Educational lore and descriptions
+## Architecture
 
-## 🛠️ Tech Stack
+The data layer is the substance of this project. It is built in four stages so that adding a new object type means adding a provider and a mapper, not editing existing code:
 
-- **Framework**: React Native with Expo
-- **Language**: TypeScript
-- **State Management**: Zustand
-- **Storage**: AsyncStorage for persistence
-- **Animations**: React Native Animated API
-- **Styling**: React Native StyleSheet with linear gradients
-- **Icons**: Emoji-based design system
+```
+API clients      →  providers        →  mappers          →  catalog service  →  Zustand stores
+(HTTP only)         (fetch + cache)     (API → domain)      (orchestration)     (UI state)
 
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js (v18 or higher)
-- npm or yarn
-- Expo CLI
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Chnmtl/CosmicCollector.git
-   cd CosmicCollector
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Configure API Keys**
-   ```bash
-   # Copy the environment template
-   cp .env.example .env
-   
-   # Edit .env and add your Solar System API key
-   # Get your API key from: https://api.le-systeme-solaire.net/
-   ```
-
-4. **Start the development server**
-   ```bash
-   npm run web      # Web development
-   npm run android  # Android development
-   npm run ios      # iOS development (requires macOS)
-   ```
-
-### Building for Production
-
-```bash
-# Web build
-npx expo export --platform web
-
-# Native builds (requires Expo Application Services)
-npx expo build:android
-npx expo build:ios
+SolarSystemClient   PlanetProvider      mapPlanet          CatalogService      playerStore
+WikipediaClient     MoonProvider        mapMoon                                collectionStore
+                    StarProvider        mapExtractedStar                       inventoryStore
 ```
 
-## 🎮 How to Play
+Notable pieces:
 
-1. **Start Exploring**: Tap the "Explore Universe" button to discover celestial objects
-2. **Energy System**: Each exploration costs 1 energy. Energy refills automatically over time
-3. **Collect Cards**: Discovered objects are added to your collection with detailed information
-4. **Level Up**: Earn XP from discoveries to increase your level and unlock new content
-5. **Complete Missions**: Check the Missions tab for achievements and extra rewards
-6. **Build Collection**: Use filters to organize and view your celestial collection
+- **Server-side filtering.** `SolarSystemClient.getMoons()` asks the API for exactly the moons it needs — multiple `filter[]` parameters with `satisfy=any` — then dedupes and returns the top 60 by mean radius, instead of downloading every body and filtering on the device.
+- **Dependency-ordered loading.** `CatalogService` loads planets first, then fans out to moons (which need planet IDs) and stars in parallel.
+- **24-hour AsyncStorage cache** per object type, so the app is usable offline after first launch.
+- **Descriptions** are fetched from the Wikipedia REST API and merged into objects at map time.
+- **Star pipeline.** `scripts/extractStars.js` turns a source spreadsheet into `src/data/stars.json`; `mapExtractedStar` parses the messy string values ("25.3 ± 5.3 M☉", "2.2 - 3.56 Myr") into numbers.
 
-## 📊 Game Mechanics
+## Tech stack
 
-### Rarity & Rewards
-- **Common** (60% chance): 10-15 XP, basic loot
-- **Rare** (25% chance): 20-30 XP, better rewards
-- **Epic** (12% chance): 40-65 XP, valuable loot + particle effects
-- **Legendary** (3% chance): 80-150 XP, premium rewards + spectacular effects
+React Native 0.81 · Expo 54 · React 19 · TypeScript 5.9 · Zustand 5 · AsyncStorage · Expo Linear Gradient · React Native Animated
 
-### Energy System
-- **Max Energy**: 10 units
-- **Refill Rate**: 1 energy every 5 minutes
-- **Strategic Element**: Prevents spam while encouraging regular play
+## Getting started
 
-### Progression
-- **XP Requirements**: Increases with each level (Level 1: 100 XP, Level 2: 200 XP, etc.)
-- **Missions**: 8 different achievement categories
-- **Collection Goals**: Discover all objects across different types and rarities
+**Prerequisites:** Node.js 18+, and an Android/iOS emulator or the Expo Go app.
 
-## 🗂️ Project Structure
+```bash
+git clone https://github.com/Chnmtl/CosmicCollector.git
+cd CosmicCollector
+npm install
+
+# The Solar System API requires a bearer token (free, but mandatory).
+# Generate one at https://api.le-systeme-solaire.net/generatekey.html
+cp .env.example .env      # then paste your key into .env
+
+npm run android   # or: npm run ios / npm run web
+```
+
+> **Note:** `EXPO_PUBLIC_*` variables are baked in at bundle time. After changing `.env`, restart the dev server — a hot reload will not pick up a new key. An expired token shows up as `403` on every request.
+
+## Project structure
 
 ```
 src/
-├── components/          # Reusable UI components
-│   ├── CelestialCard.tsx   # Main card component
-│   ├── ProgressBar.tsx     # XP and mission progress
-│   ├── TabBar.tsx          # Bottom navigation
-│   ├── AnimatedCard.tsx    # Card flip animations
-│   └── ParticleEffect.tsx  # Rare discovery effects
-├── screens/             # Main app screens
-│   ├── ExploreScreen.tsx   # Discovery interface
-│   ├── CollectionScreen.tsx # Card collection view
-│   └── MissionsScreen.tsx  # Achievements and missions
-├── store/               # State management
-│   └── gameStore.ts        # Zustand store with persistence
-├── data/                # Game content
-│   ├── celestialObjects.ts # Object database
-│   └── missions.ts         # Achievement definitions
-├── types/               # TypeScript definitions
-│   └── index.ts            # Core interfaces
-└── utils/               # Helper functions
+├── api/clients/      SolarSystemClient, WikipediaClient  — HTTP only
+├── models/           Domain types: CosmicObject, Planet, Moon, Star
+├── services/
+│   ├── providers/    Fetch + cache per object type
+│   ├── mappers/      API response → domain model (pure functions)
+│   ├── CatalogService.ts
+│   └── cacheService.ts
+├── store/            Zustand: player, collection, inventory
+├── components/       Cards (flip, front, back, compact), filters, tab bar
+├── screens/          Explore, Collection, Missions
+├── data/             Star dataset + mission and game-balance data
+└── utils/            Constants, formatters, image resolver, stats
+scripts/extractStars.js   Spreadsheet → stars.json
 ```
 
-## 🎯 Future Enhancements
+## Artwork
 
-- **Sound Effects**: Audio feedback for discoveries and interactions
-- **Daily Challenges**: Rotating special missions
-- **Trading System**: Exchange duplicate objects
-- **Real NASA API**: Integration with live astronomical data
-- **Augmented Reality**: AR view of discovered objects
-- **Social Features**: Share discoveries with friends
-- **Constellation Mode**: Group related objects
-- **Seasonal Events**: Special limited-time objects
+Cards use bundled artwork resolved by `src/utils/imageResolver.ts`: dedicated images for 43 of the 60 moons and for Earth, and a generated default image per object type (star, planet, moon, galaxy, exoplanet, nebula, black hole) for everything else.
 
-## 🎨 Design Philosophy
+## Roadmap
 
-- **Educational**: Real astronomical facts make learning fun
-- **Accessible**: Simple tap-to-play mechanics for all ages
-- **Beautiful**: Space-themed design with smooth animations
-- **Balanced**: Strategic energy system promotes regular engagement
-- **Rewarding**: Multiple progression systems keep players motivated
+- Artwork for the remaining moons and the seven other planets
+- Better Wikipedia description matching — some objects resolve to poor or wrong articles
+- Additional object types: galaxies, nebulae, exoplanets and black holes (models and defaults exist; providers do not yet)
+- Sound effects and daily challenges
 
-## 📱 Platform Support
+## License
 
-- ✅ **Web**: Fully functional web app
-- ✅ **iOS**: Native iOS app via Expo
-- ✅ **Android**: Native Android app via Expo
-- 🔄 **Offline**: Local storage for progress persistence
+MIT — see [LICENSE](LICENSE).
 
-## 🤝 Contributing
+## Author
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👨‍💻 Author
-
-**Cihan Mutlu** - [GitHub](https://github.com/Chnmtl)
-
----
-
-*Explore the cosmos, one card at a time! 🌌*
+**Cihan Mutlu** — [github.com/Chnmtl](https://github.com/Chnmtl)
