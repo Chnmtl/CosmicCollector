@@ -4,6 +4,10 @@ A React Native (Expo) collectible-card game built on **real astronomical data**.
 
 **Catalog: 148 objects** — 8 planets and 60 moons from the [Solar System OpenData API](https://api.le-systeme-solaire.net/), plus 80 stars from a dataset compiled from Wikipedia.
 
+| Explore | Collection | Missions |
+|:--:|:--:|:--:|
+| ![Explore screen](docs/screenshots/explore-screen.png) | ![Collection screen](docs/screenshots/collection-screen.png) | ![Missions screen](docs/screenshots/missions-screen.png) |
+
 ## Screens
 
 | Screen | What it does |
@@ -13,6 +17,10 @@ A React Native (Expo) collectible-card game built on **real astronomical data**.
 | **Missions** | Nine achievements tracking discoveries, types collected and level milestones. |
 
 Cards flip to reveal the object's real scientific data — mass, radius, gravity, orbital period, surface temperature, spectral class, distance — alongside a description and themed loot.
+
+| Card front | Card back |
+|:--:|:--:|
+| ![Card front](docs/screenshots/card-front.png) | ![Card back](docs/screenshots/card-back.png) |
 
 ## Architecture
 
