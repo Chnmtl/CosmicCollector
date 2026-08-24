@@ -1,16 +1,14 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
-import { CelestialObjectType } from "../../types";
-import { calculateTypeStats, FILTER_OPTIONS } from "../../utils";
-import { CelestialObject } from "../../types";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { CosmicObjectType, CosmicObject } from "../../models";
+import { calculateTypeStats, FILTER_OPTIONS, getTypeIcon } from "../../utils";
 import ResponsiveStrip from "../common/ResponsiveStrip";
-import TypeFilterItem from "./TypeFilterItem";
 
 interface TypeFilterProps {
-  objects: CelestialObject[];
-  allObjects: CelestialObject[];
-  selectedType: CelestialObjectType | "All";
-  onSelectType: (type: CelestialObjectType | "All") => void;
+  objects: CosmicObject[];
+  allObjects: CosmicObject[];
+  selectedType: CosmicObjectType | "All";
+  onSelectType: (type: CosmicObjectType | "All") => void;
 }
 
 const TypeFilter: React.FC<TypeFilterProps> = ({
@@ -31,16 +29,30 @@ const TypeFilter: React.FC<TypeFilterProps> = ({
           const count =
             type === "All"
               ? objects.length
-              : typeStats[type as CelestialObjectType] || 0;
+              : typeStats[type as CosmicObjectType] || 0;
+          const isActive = selectedType === type;
+          const icon = type === "All" ? "🌌" : getTypeIcon(type);
 
           return (
-            <TypeFilterItem
+            <TouchableOpacity
               key={type}
-              type={type}
-              count={count}
-              isActive={selectedType === type}
+              style={[
+                styles.filterButton,
+                isActive && styles.activeFilterButton,
+              ]}
               onPress={() => onSelectType(type)}
-            />
+              accessible
+              accessibilityRole="button"
+              accessibilityLabel={`Filter by ${type}`}
+            >
+              <Text style={styles.filterIcon}>{icon}</Text>
+              <Text
+                style={[styles.filterText, isActive && styles.activeFilterText]}
+              >
+                {type}
+              </Text>
+              <Text style={styles.filterCount}>{count}</Text>
+            </TouchableOpacity>
           );
         })}
       </ResponsiveStrip>
@@ -61,6 +73,38 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 8,
+  },
+  filterButton: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 8,
+    marginHorizontal: 4,
+    borderRadius: 16,
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    minWidth: 80,
+  },
+  activeFilterButton: {
+    backgroundColor: "rgba(0, 212, 255, 0.2)",
+  },
+  filterIcon: {
+    fontSize: 22,
+    marginBottom: 6,
+  },
+  filterText: {
+    fontSize: 13,
+    color: "#ddd",
+    textAlign: "center",
+    marginBottom: 4,
+  },
+  activeFilterText: {
+    color: "#00d4ff",
+    fontWeight: "bold",
+  },
+  filterCount: {
+    fontSize: 11,
+    color: "#ccc",
+    marginTop: 2,
   },
 });
 

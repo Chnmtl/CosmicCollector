@@ -1,4 +1,4 @@
-import { Mission } from '../types';
+import { Mission } from '../models/CosmicObject';
 
 export const defaultMissions: Mission[] = [
   {

@@ -6,8 +6,17 @@
 // Constants
 export * from './constants';
 
-// Celestial object utilities
-export * from './celestialUtils';
+// Card helper utilities (colors, icons, filters, sorting)
+export * from './cardHelpers';
 
 // Stats calculators
 export * from './statsCalculator';
+
+// Game balance calculations
+export * from './gameBalance';
+
+// Formatters
+export * from './formatters';
+
+// Stats extractor
+export * from './statsExtractor';

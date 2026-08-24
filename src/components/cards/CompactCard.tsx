@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { CelestialObject } from "../../types";
+import { CosmicObject } from "../../models";
 import {
   getRarityColors,
   getTypeIcon,
@@ -12,7 +12,7 @@ import {
 } from "../../utils";
 
 interface CompactCardProps {
-  object: CelestialObject;
+  object: CosmicObject;
   onPress?: () => void;
 }
 
@@ -22,6 +22,19 @@ const CompactCard: React.FC<CompactCardProps> = ({ object, onPress }) => {
   const backgroundColor = getTypeBackground(object.type);
   const panelColor = getTypePanelOverlay(object.type);
   const textColor = getCardTextColor(object.type);
+
+  // Create dynamic styles based on object type
+  const dynamicStyles = StyleSheet.create({
+    cardInnerWithBackground: {
+      backgroundColor: backgroundColor,
+    },
+    panelWithBackground: {
+      backgroundColor: panelColor,
+    },
+    textWithColor: {
+      color: textColor,
+    },
+  });
 
   return (
     <TouchableOpacity
@@ -38,25 +51,45 @@ const CompactCard: React.FC<CompactCardProps> = ({ object, onPress }) => {
           {/* Rarity border */}
           <LinearGradient colors={rarityColors} style={styles.rarityBorder}>
             {/* Card inner content */}
-            <View style={[styles.cardInner, { backgroundColor }]}>
+            <View
+              style={[styles.cardInner, dynamicStyles.cardInnerWithBackground]}
+            >
               {/* Image/Icon container */}
               <View
-                style={[styles.imageContainer, { backgroundColor: panelColor }]}
+                style={[
+                  styles.imageContainer,
+                  dynamicStyles.panelWithBackground,
+                ]}
               >
-                <Text style={styles.emoji}>{object.image}</Text>
+                {object.imageUrl ? (
+                  <Image
+                    source={
+                      typeof object.imageUrl === "string"
+                        ? { uri: object.imageUrl }
+                        : object.imageUrl
+                    }
+                    style={styles.planetImage}
+                    resizeMode="contain"
+                  />
+                ) : (
+                  <Text style={styles.emoji}>{typeIcon}</Text>
+                )}
               </View>
 
               {/* Name and type container */}
               <View
-                style={[styles.infoContainer, { backgroundColor: panelColor }]}
+                style={[
+                  styles.infoContainer,
+                  dynamicStyles.panelWithBackground,
+                ]}
               >
                 <Text
-                  style={[styles.name, { color: textColor }]}
+                  style={[styles.name, dynamicStyles.textWithColor]}
                   numberOfLines={2}
                 >
                   {object.name}
                 </Text>
-                <Text style={[styles.type, { color: textColor }]}>
+                <Text style={[styles.type, dynamicStyles.textWithColor]}>
                   {typeIcon} {object.type}
                 </Text>
               </View>
@@ -102,6 +135,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 8,
+    overflow: "hidden",
+  },
+  planetImage: {
+    width: "100%",
+    height: "100%",
   },
   emoji: {
     fontSize: 56,

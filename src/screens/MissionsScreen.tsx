@@ -1,12 +1,30 @@
 import React from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useGameStore } from "../store/gameStore";
+import { usePlayerStore, useCollectionStore } from "../store";
 import { defaultMissions } from "../data/missions";
 import ProgressBar from "../components/ProgressBar";
 
 const MissionsScreen: React.FC = () => {
-  const { userProgress, discoveredObjects } = useGameStore();
+  const { progress, resetProgress } = usePlayerStore();
+  const { getDiscoveredObjects, resetCollection, loadCatalog } =
+    useCollectionStore();
+
+  // Get discovered objects
+  const discoveredObjects = getDiscoveredObjects();
+
+  // Handle reset with cache clearing, energy reset, and catalog reload
+  const handleReset = async () => {
+    await resetCollection(); // This clears all caches and discoveries
+    await resetProgress(); // Reset player progress (energy, XP, level)
+    await loadCatalog(); // Reload fresh data from API
+  };
 
   const getMissionProgress = (mission: any) => {
     switch (mission.type) {
@@ -19,7 +37,7 @@ const MissionsScreen: React.FC = () => {
           return discoveredObjects.length;
         }
       case "level":
-        return userProgress.level;
+        return progress.level;
       case "collect":
         if (mission.id === "rare-hunter") {
           return discoveredObjects.filter((obj) =>
@@ -150,6 +168,24 @@ const MissionsScreen: React.FC = () => {
             </View>
           );
         })}
+
+        {/* DEBUG: Clear Progress Button */}
+        <View style={styles.debugSection}>
+          <Text style={styles.debugTitle}>🛠️ Debug Tools</Text>
+          <TouchableOpacity
+            style={styles.clearButton}
+            onPress={handleReset}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.clearButtonText}>
+              🧹 Clear All Progress & Cache
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.debugInfo}>
+            Clears discoveries, energy, XP, and cached data, then reloads fresh
+            from API
+          </Text>
+        </View>
       </ScrollView>
     </View>
   );
@@ -252,6 +288,41 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#aaa",
     flex: 1,
+  },
+  debugSection: {
+    marginTop: 30,
+    marginBottom: 20,
+    padding: 20,
+    backgroundColor: "rgba(255, 152, 0, 0.1)",
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "rgba(255, 152, 0, 0.3)",
+  },
+  debugTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#FF9800",
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  clearButton: {
+    backgroundColor: "rgba(244, 67, 54, 0.8)",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  clearButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  debugInfo: {
+    fontSize: 12,
+    color: "#FF9800",
+    textAlign: "center",
+    opacity: 0.8,
   },
 });
 
